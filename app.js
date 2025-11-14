@@ -43,9 +43,9 @@ app.use(
   })
 );
 
-// require('./config/passport');
-// app.use(passport.initialize());
-// app.use(passport.session());
+require('./config/passport');
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
 // misc. middleware and variables
