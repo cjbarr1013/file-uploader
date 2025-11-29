@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/cjbarr1013/file-uploader#readme",
   "dependencies": {
+    "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^6.19.0",
     "@quixo3/prisma-session-store": "^3.1.13",
     "@tailwindcss/cli": "^4.1.16",
@@ -62,10 +63,9 @@
     "superagent": "^10.2.3",
     "supertest": "^7.1.4"
   },
-  "prisma": {
-    "seed": "node prisma/seed.js"
-  },
   "jest": {
+    "testEnvironment": "node",
+    "clearMocks": true,
     "setupFilesAfterEnv": [
       "./tests/setupTests.js"
     ],

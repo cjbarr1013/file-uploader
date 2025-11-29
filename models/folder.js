@@ -9,15 +9,21 @@ const Folder = {
   },
 
   // find
-  async findById(id) {
+  async findById(folderId, userId) {
     return prisma.folder.findUnique({
-      where: { id },
+      where: {
+        id: folderId,
+        creatorId: userId,
+      },
     });
   },
 
-  async findByIdWithParent(id) {
+  async findByIdWithParent(folderId, userId) {
     return prisma.folder.findUnique({
-      where: { id },
+      where: {
+        id: folderId,
+        creatorId: userId,
+      },
       include: {
         parent: {
           select: {
@@ -29,9 +35,12 @@ const Folder = {
     });
   },
 
-  async findByIdWithContent(id) {
+  async findByIdWithContent(folderId, userId) {
     return prisma.folder.findUnique({
-      where: { id },
+      where: {
+        id: folderId,
+        creatorId: userId,
+      },
       include: {
         parent: {
           select: {
@@ -46,9 +55,14 @@ const Folder = {
   },
 
   // ... > grandparent > parent > current
-  async findByIdWithBreadcrumbs(id) {
+  async findByIdWithBreadcrumbs(folderId, userId) {
+    if (folderId === null) return null;
+
     return prisma.folder.findUnique({
-      where: { id },
+      where: {
+        id: folderId,
+        creatorId: userId,
+      },
       select: {
         id: true,
         name: true,
@@ -69,30 +83,35 @@ const Folder = {
   },
 
   // update
-  async update(id, updateData) {
+  async update(folderId, userId, updateData) {
     return prisma.folder.update({
-      where: { id },
+      where: {
+        id: folderId,
+        creatorId: userId,
+      },
       data: updateData,
     });
   },
 
   // delete
-  async delete(id) {
+  async delete(folderId, userId) {
     await prisma.$transaction(async (tx) => {
-      // get folder before delete (we need user's id)
-      const folder = await tx.folder.findUnique({ where: { id } });
-
-      await tx.folder.delete({ where: { id } });
+      await tx.folder.delete({
+        where: {
+          id: folderId,
+          creatorId: userId,
+        },
+      });
 
       // get sum of user's file sizes
       const aggregations = await tx.file.aggregate({
-        where: { creatorId: folder.creatorId },
+        where: { creatorId: userId },
         _sum: { size: true },
       });
 
       // update user's storage value
       await tx.user.update({
-        where: { id: folder.creatorId },
+        where: { id: userId },
         data: { storageUsed: aggregations._sum.size },
       });
     });

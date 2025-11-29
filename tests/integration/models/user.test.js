@@ -18,7 +18,7 @@ describe('User Model', () => {
         username: 'CMook1',
         hasPic: false,
         picVersion: null,
-        storageUsed: 0,
+        storageUsed: 0n,
       });
       expect(createdUser.id).toBeDefined();
       expect(createdUser.password).not.toBe('password');

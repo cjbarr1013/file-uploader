@@ -1,4 +1,6 @@
 const prisma = require('../utils/db');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 async function seed(prismaClient = prisma) {
   // seed new data
@@ -7,8 +9,8 @@ async function seed(prismaClient = prisma) {
       first: 'John',
       last: 'Smith',
       username: 'JSmith1',
-      password: 'password',
-      storageUsed: 60676,
+      password: await bcrypt.hash('password', 10),
+      storageUsed: 741986,
     },
   });
 
@@ -37,6 +39,7 @@ async function seed(prismaClient = prisma) {
                   files: {
                     create: [
                       {
+                        cloudinaryPublicId: crypto.randomUUID(),
                         name: 'subsubfile1',
                         size: 32999,
                         format: 'pdf',
@@ -44,6 +47,7 @@ async function seed(prismaClient = prisma) {
                         creatorId: user.id,
                       },
                       {
+                        cloudinaryPublicId: crypto.randomUUID(),
                         name: 'subsubfile4',
                         size: 1944,
                         format: 'webp',
@@ -51,6 +55,7 @@ async function seed(prismaClient = prisma) {
                         creatorId: user.id,
                       },
                       {
+                        cloudinaryPublicId: crypto.randomUUID(),
                         name: 'subsubfile3',
                         size: 934,
                         format: 'jpeg',
@@ -65,15 +70,17 @@ async function seed(prismaClient = prisma) {
             files: {
               create: [
                 {
+                  cloudinaryPublicId: crypto.randomUUID(),
                   name: 'subfile1',
-                  size: 2367,
+                  size: 232367,
                   format: 'pdf',
                   favorite: true,
                   creatorId: user.id,
                 },
                 {
+                  cloudinaryPublicId: crypto.randomUUID(),
                   name: 'subfile2',
-                  size: 543,
+                  size: 54433,
                   format: 'webp',
                   favorite: false,
                   creatorId: user.id,
@@ -88,15 +95,17 @@ async function seed(prismaClient = prisma) {
             files: {
               create: [
                 {
+                  cloudinaryPublicId: crypto.randomUUID(),
                   name: 'subfile3',
-                  size: 2367,
+                  size: 23647,
                   format: 'pdf',
                   favorite: true,
                   creatorId: user.id,
                 },
                 {
+                  cloudinaryPublicId: crypto.randomUUID(),
                   name: 'subfile4',
-                  size: 543,
+                  size: 54243,
                   format: 'webp',
                   favorite: false,
                   creatorId: user.id,
@@ -114,20 +123,23 @@ async function seed(prismaClient = prisma) {
       files: {
         create: [
           {
+            cloudinaryPublicId: crypto.randomUUID(),
             name: 'file1',
-            size: 2367,
+            size: 236247,
             format: 'pdf',
             favorite: true,
             creatorId: user.id,
           },
           {
+            cloudinaryPublicId: crypto.randomUUID(),
             name: 'file2',
-            size: 123,
+            size: 12223,
             format: 'jpg',
             favorite: false,
             creatorId: user.id,
           },
           {
+            cloudinaryPublicId: crypto.randomUUID(),
             name: 'file3',
             size: 10456,
             format: 'jpeg',
@@ -142,22 +154,25 @@ async function seed(prismaClient = prisma) {
   await prismaClient.file.createMany({
     data: [
       {
+        cloudinaryPublicId: crypto.randomUUID(),
         name: 'truefile1',
-        size: 4564,
+        size: 45624,
         format: 'pdf',
         favorite: true,
         creatorId: user.id,
       },
       {
+        cloudinaryPublicId: crypto.randomUUID(),
         name: 'truefile2',
-        size: 1223,
+        size: 12423,
         format: 'jpg',
         favorite: false,
         creatorId: user.id,
       },
       {
+        cloudinaryPublicId: crypto.randomUUID(),
         name: 'truefile3',
-        size: 246,
+        size: 24446,
         format: 'jpeg',
         favorite: false,
         creatorId: user.id,

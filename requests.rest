@@ -1,0 +1,145 @@
+###############################################
+### Register
+###############################################
+
+### Get Register page
+GET http://localhost:3000/auth/register
+
+### Register new user
+POST http://localhost:3000/auth/register
+Content-Type: application/x-www-form-urlencoded
+
+first=Craig&last=Phillips&username=CPhillips2&password=Password123!&passwordVerify=Password123!
+
+### Register new user - User name already exists
+POST http://localhost:3000/auth/register
+Content-Type: application/x-www-form-urlencoded
+
+first=Craig&last=Phillips&username=JSmith1&password=Password123!&passwordVerify=Password123!
+
+### Register new user - Password does not meet criteria
+POST http://localhost:3000/auth/register
+Content-Type: application/x-www-form-urlencoded
+
+first=Craig&last=Phillips&username=CPhillips2&password=password&passwordVerify=password
+
+### Register new user - Passwords do not match
+POST http://localhost:3000/auth/register
+Content-Type: application/x-www-form-urlencoded
+
+first=Craig&last=Phillips&username=CPhillips2&password=Password123!&passwordVerify=Password124!
+
+###############################################
+### Login
+###############################################
+
+### Get Login page
+GET http://localhost:3000/auth/login
+
+### Login user
+POST http://localhost:3000/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=JSmith1&password=password
+
+### Login - username does not exist
+POST http://localhost:3000/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=JSmith&password=password
+
+### Login - wrong password
+POST http://localhost:3000/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=JSmith1&password=password1
+
+###############################################
+### Logout
+###############################################
+
+### Logout
+POST http://localhost:3000/auth/logout
+
+###############################################
+### Delete Account
+###############################################
+
+### Delete user
+POST http://localhost:3000/user/delete
+
+###############################################
+### Basic Navigation
+###############################################
+
+### Home request
+GET http://localhost:3000/
+
+### Specific folder request
+GET http://localhost:3000/folders/3
+
+### Favorites request
+GET http://localhost:3000/favorites
+
+### Search results request
+GET http://localhost:3000/search?q=File
+
+### Recents request
+GET http://localhost:3000/files/recent
+
+###############################################
+### Folders
+###############################################
+
+### Create new folder
+POST http://localhost:3000/folders/create
+Content-Type: application/x-www-form-urlencoded
+
+name=Buttsniffer&parentId=1
+
+### Delete new folder
+POST http://localhost:3000/folders/8/delete
+
+### Edit folder name
+POST http://localhost:3000/folders/5/edit/name
+Content-Type: application/x-www-form-urlencoded
+
+name=editedFolderName
+
+### Edit folder location
+POST http://localhost:3000/folders/5/edit/location
+Content-Type: application/x-www-form-urlencoded
+
+parentId=3
+
+### Edit folder favorite
+POST http://localhost:3000/folders/5/edit/favorite
+
+###############################################
+### Files
+###############################################
+
+### Edit name
+POST http://localhost:3000/files/5/edit/name
+Content-Type: application/x-www-form-urlencoded
+
+name=editedFileName
+
+### Edit location
+POST http://localhost:3000/files/5/edit/location
+Content-Type: application/x-www-form-urlencoded
+
+parentId=3
+
+### Edit favorite
+POST http://localhost:3000/files/5/edit/favorite
+
+###############################################
+### Edit Profile
+###############################################
+
+### Edit profile sucessfully
+POST http://localhost:3000/user/edit
+Content-Type: application/x-www-form-urlencoded
+
+first=Bob&last=Goodman

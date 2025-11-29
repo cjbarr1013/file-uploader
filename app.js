@@ -6,6 +6,13 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const prisma = require('./utils/db');
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
+const authRouter = require('./routes/authRouter');
+const favoritesRouter = require('./routes/favoritesRouter');
+const filesRouter = require('./routes/filesRouter');
+const foldersRouter = require('./routes/foldersRouter');
+const indexRouter = require('./routes/indexRouter');
+const searchRouter = require('./routes/searchRouter');
+const userRouter = require('./routes/userRouter');
 
 // app initialization
 const app = express();
@@ -52,7 +59,7 @@ app.use(flash());
 app.use((req, res, next) => {
   // locals
   res.locals.currentUser = req.user;
-  res.locals.messages = req.flash();
+  res.locals.flash = req.flash();
 
   // session
   next();
@@ -65,9 +72,13 @@ app.use(
 );
 
 // routes
-app.use('/', (req, res) => {
-  return res.status(200).send('hello');
-});
+app.use('/auth', authRouter);
+app.use('/favorites', favoritesRouter);
+app.use('/files', filesRouter);
+app.use('/folders', foldersRouter);
+app.use('/search', searchRouter);
+app.use('/user', userRouter);
+app.use('/', indexRouter);
 
 // error handling
 app.use((req, res) => {

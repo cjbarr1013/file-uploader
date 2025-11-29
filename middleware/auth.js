@@ -20,6 +20,19 @@ function isNotAuthRoute(req, res, next) {
   if (!req.isAuthenticated()) {
     next();
   } else {
+    req.flash(
+      'errorFlash',
+      'You must log out before attempting to access this page.'
+    );
+    return res.status(401).redirect('/');
+  }
+}
+
+function isNotAuthAction(req, res, next) {
+  if (!req.isAuthenticated()) {
+    next();
+  } else {
+    req.flash('errorFlash', 'You must be logged out to complete this action.');
     return res.status(401).redirect('/');
   }
 }
@@ -28,4 +41,5 @@ module.exports = {
   isAuthRoute,
   isAuthAction,
   isNotAuthRoute,
+  isNotAuthAction,
 };

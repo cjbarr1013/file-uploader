@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const File = require('../../../models/file');
 const User = require('../../../models/user');
 
@@ -5,13 +6,14 @@ describe('File Model', () => {
   describe('create', () => {
     it('creates new file in the database', async () => {
       const fileData = {
+        cloudinaryPublicId: crypto.randomUUID(),
         name: '',
         size: 3987,
         format: 'pdf',
         creatorId: 1,
       };
 
-      const createdFile = await File.create(fileData);
+      const createdFile = await File.create(fileData, 1);
 
       expect(createdFile).toMatchObject({
         name: '',
@@ -70,6 +72,7 @@ describe('File Model', () => {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
       const fileData = {
+        cloudinaryPublicId: crypto.randomUUID(),
         name: 'oldfile',
         size: 1000,
         format: 'pdf',
@@ -78,7 +81,7 @@ describe('File Model', () => {
         createdAt: fortyDaysAgo,
       };
 
-      const oldFile = await File.create(fileData);
+      const oldFile = await File.create(fileData, userId);
       const recentFiles = await File.findRecent(userId);
       const oldFileInResults = recentFiles.find((f) => f.id === oldFile.id);
 
@@ -95,14 +98,15 @@ describe('File Model', () => {
   describe('update', () => {
     it('updates file name and loc in the database', async () => {
       const fileId = 1;
+      const userId = 1;
       const fileData = {
         name: 'newName',
         folderId: 1,
       };
 
-      await File.update(fileId, fileData);
+      await File.update(fileId, userId, fileData);
 
-      const dbFile = await File.findById(fileId);
+      const dbFile = await File.findById(fileId, userId);
 
       expect(dbFile).toMatchObject({
         id: fileId,
@@ -122,11 +126,11 @@ describe('File Model', () => {
       const userBefore = await User.findById(userId);
       const storageBefore = userBefore.storageUsed;
 
-      await File.delete(fileId);
+      await File.delete(fileId, userId);
 
       const userAfter = await User.findById(userId);
       const storageAfter = userAfter.storageUsed;
-      const deletedFile = await File.findById(fileId);
+      const deletedFile = await File.findById(fileId, userId);
 
       expect(deletedFile).toBeFalsy();
       expect(storageBefore).toBeGreaterThan(storageAfter);

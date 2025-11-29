@@ -1,0 +1,41 @@
+const { Router } = require('express');
+const fileController = require('../controllers/fileController');
+const { isAuthAction, isAuthRoute } = require('../middleware/auth');
+const { parseFile, handleMulterError } = require('../middleware/multer');
+const filesRouter = Router();
+
+// routes
+filesRouter.get('/recent', isAuthRoute, fileController.getRecent);
+
+filesRouter.post(
+  '/upload',
+  isAuthAction,
+  parseFile,
+  handleMulterError,
+  fileController.validateUpload,
+  fileController.postUpload
+);
+
+filesRouter.get('/:id/download', isAuthRoute, fileController.getDownload);
+
+filesRouter.post(
+  '/:id/edit/name',
+  isAuthAction,
+  fileController.validateName,
+  fileController.postEditName
+);
+
+filesRouter.post(
+  '/:id/edit/location',
+  isAuthAction,
+  fileController.postEditLocation
+);
+
+filesRouter.post(
+  '/:id/edit/favorite',
+  isAuthAction,
+  fileController.postEditFavorite
+);
+filesRouter.post('/:id/delete', isAuthAction, fileController.postDelete);
+
+module.exports = filesRouter;

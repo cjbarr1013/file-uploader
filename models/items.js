@@ -44,12 +44,12 @@ const Items = {
       SELECT 
         id, name, favorite, null as size, null as format, 'folder' as type, "createdAt", "updatedAt", "parentId"
       FROM "Folder"
-      WHERE "creatorId" = ${userId} AND "parentId" = ${folderId}
+      WHERE "creatorId" = ${userId} AND "parentId" ${folderId === null ? Prisma.sql`IS NULL` : Prisma.sql`= ${folderId}`}
       UNION ALL
       SELECT 
         id, name, favorite, size, format, 'file' as type, "createdAt", "updatedAt", "folderId" as "parentId"
       FROM "File"
-      WHERE "creatorId" = ${userId} AND "folderId" = ${folderId}
+      WHERE "creatorId" = ${userId} AND "folderId" ${folderId === null ? Prisma.sql`IS NULL` : Prisma.sql`= ${folderId}`}
       ORDER BY ${Prisma.raw(column)} ${Prisma.raw(direction)} NULLS FIRST
     `;
   },

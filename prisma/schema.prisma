@@ -14,18 +14,19 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  first       String
-  last        String
-  username    String   @unique
-  password    String
-  hasPic      Boolean  @default(false)
-  picVersion  String?
-  storageUsed Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  files       File[]
-  folders     Folder[]
+  id             Int      @id @default(autoincrement())
+  first          String
+  last           String
+  username       String   @unique
+  password       String
+  hasPic         Boolean  @default(false)
+  picVersion     Int?
+  storageUsed    BigInt   @default(0)
+  sortPreference String   @default("updatedAt,DESC")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  files          File[]
+  folders        Folder[]
 }
 
 model Folder {
@@ -43,17 +44,18 @@ model Folder {
 }
 
 model File {
-  id        Int      @id @default(autoincrement())
-  name      String
-  size      Int
-  format    String
-  favorite  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  folder    Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
-  folderId  Int?
-  creator   User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  creatorId Int
+  id                 Int      @id @default(autoincrement())
+  cloudinaryPublicId String   @unique
+  name               String
+  size               Int
+  format             String
+  favorite           Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  folder             Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId           Int?
+  creator            User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId          Int
 }
 
 model Session {

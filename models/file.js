@@ -2,11 +2,11 @@ const prisma = require('../utils/db');
 
 const File = {
   // create
-  async create(fileData) {
+  async create(fileData, userId) {
     const transaction = await prisma.$transaction([
       prisma.file.create({ data: fileData }),
       prisma.user.update({
-        where: { id: fileData.creatorId },
+        where: { id: userId },
         data: {
           storageUsed: { increment: fileData.size },
         },
@@ -16,15 +16,15 @@ const File = {
   },
 
   // find
-  async findById(id) {
+  async findById(id, userId) {
     return prisma.file.findUnique({
-      where: { id },
+      where: { id, creatorId: userId },
     });
   },
 
-  async findByIdWithParent(id) {
+  async findByIdWithParent(id, userId) {
     return prisma.file.findUnique({
-      where: { id },
+      where: { id, creatorId: userId },
       include: {
         folder: true,
       },
@@ -47,15 +47,15 @@ const File = {
   },
 
   // update
-  async update(id, updateData) {
+  async update(id, userId, updateData) {
     return prisma.file.update({
-      where: { id },
+      where: { id, creatorId: userId },
       data: updateData,
     });
   },
 
   // delete
-  async delete(id) {
+  async delete(id, userId) {
     await prisma.$transaction(async (tx) => {
       // get file for user's id and file size
       const file = await tx.file.findUnique({ where: { id } });
@@ -64,7 +64,7 @@ const File = {
 
       // update user's storage value
       await tx.user.update({
-        where: { id: file.creatorId },
+        where: { id: userId },
         data: { storageUsed: { decrement: file.size } },
       });
     });
