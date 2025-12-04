@@ -13,6 +13,17 @@ const validateUpload = [
     if (!req.file) {
       throw new Error('Please select a file to upload.');
     }
+
+    const storageQuota = BigInt(process.env.STORAGE_QUOTA_BYTES);
+    const newStorageTotal = BigInt(req.file.size) + req.user.storageUsed;
+
+    if (newStorageTotal > storageQuota) {
+      const availableSpace = storageQuota - req.user.storageUsed;
+      throw new Error(
+        `Upload exceeds storage quota. You have ${Number(availableSpace)} bytes remaining.`
+      );
+    }
+
     return true;
   }),
 ];

@@ -31,7 +31,7 @@ describe('File Controller', () => {
       .type('form')
       .send({ username: 'JSmith1', password: 'password' });
 
-    // Upload image
+    // Upload file
     const response = await agent
       .post('/files/upload')
       .field('parentId', '1')
@@ -81,6 +81,35 @@ describe('File Controller', () => {
 
     // Verify no new file was created
     const filesAfter = await File.findRecent(1);
+    expect(filesAfter.length).toBe(filesBefore.length);
+  });
+
+  it('does not upload file when storage quota is exceeded', async () => {
+    const agent = request.agent(app);
+
+    // Login first
+    await agent
+      .post('/auth/login')
+      .type('form')
+      .send({ username: 'CSmith1', password: 'password' });
+
+    const filesBefore = await File.findRecent(2);
+
+    // Upload file
+    const response = await agent
+      .post('/files/upload')
+      .attach(
+        'upload',
+        path.join(__dirname, '../../fixtures/good-test-file.txt')
+      );
+
+    expect(response.status).toBe(302);
+
+    // Verify Cloudinary was NOT called
+    expect(helpers.uploadFileBuffer).not.toHaveBeenCalled();
+
+    // Verify no new file was created
+    const filesAfter = await File.findRecent(2);
     expect(filesAfter.length).toBe(filesBefore.length);
   });
 

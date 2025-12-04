@@ -14,6 +14,16 @@ async function seed(prismaClient = prisma) {
     },
   });
 
+  await prismaClient.user.create({
+    data: {
+      first: 'Craig',
+      last: 'Smith',
+      username: 'CSmith1',
+      password: await bcrypt.hash('password', 10),
+      storageUsed: 104857595,
+    },
+  });
+
   await prismaClient.folder.create({
     data: {
       name: 'folder1',
