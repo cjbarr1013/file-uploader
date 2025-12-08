@@ -1,6 +1,10 @@
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
-const { uploadImageBuffer } = require('../utils/helpers');
+const {
+  uploadImageBuffer,
+  redirectError,
+  redirectSuccess,
+} = require('../utils/helpers');
 
 const validateFirstAndLast = [
   body('first')
@@ -64,7 +68,7 @@ function getRegister(req, res) {
   });
 }
 
-async function postRegister(req, res, next) {
+async function postRegister(req, res) {
   const { first, last, username, password } = req.body;
   const errors = validationResult(req);
 
@@ -83,12 +87,25 @@ async function postRegister(req, res, next) {
     const user = await User.create({ first, last, username, password });
     req.login(user, (err) => {
       if (err) {
-        return next(err);
+        console.error('Auto-login failed after registration:', err);
+        return redirectSuccess(
+          req,
+          res,
+          'Account created successfully! Please log in to continue.',
+          '/auth/login'
+        );
       }
       return res.redirect('/');
     });
   } catch (err) {
-    next(err);
+    console.error('Account creation failed:', err);
+    redirectError(
+      req,
+      res,
+      [{ msg: 'Account creation failed. Please try again later.' }],
+      '/auth/register',
+      { first, last, username }
+    );
   }
 }
 
@@ -113,20 +130,28 @@ function postLogout(req, res, next) {
     if (err) {
       return next(err);
     }
-    req.flash('success', 'You have successfully logged out.');
-    return res.redirect('/auth/login');
+    redirectSuccess(
+      req,
+      res,
+      'You have successfully logged out.',
+      '/auth/login'
+    );
   });
 }
 
-async function postEdit(req, res, next) {
+async function postEdit(req, res) {
   const { first, last, pic } = req.body;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    req.flash('errors', errors.array());
-    req.flash('formData', { first, last, pic });
-    req.flash('showModal', true);
-    return res.redirect('back');
+    return redirectError(
+      req,
+      res,
+      errors.array(),
+      'back',
+      { first, last, pic },
+      true
+    );
   }
 
   try {
@@ -141,22 +166,36 @@ async function postEdit(req, res, next) {
         );
         hasPic = true;
         picVersion = result?.version || null;
-      } catch {
+      } catch (err) {
         // handle upload failure
-        req.flash('errors', [
-          { msg: 'Image upload failed. Please try again.' },
-        ]);
-        req.flash('formData', { first, last, pic });
-        req.flash('showModal', true);
-        return res.redirect('back');
+        console.error('Failed to upload profile picture:', err);
+        return redirectError(
+          req,
+          res,
+          [{ msg: 'Image upload failed. Please try again.' }],
+          'back',
+          { first, last, pic },
+          true
+        );
       }
     }
 
     await User.updateProfile(req.user.id, { first, last, hasPic, picVersion });
-    req.flash('success', 'Profile updated successfully!');
-    return res.redirect('back');
+    return redirectSuccess(req, res, 'Profile updated successfully!', 'back');
   } catch (err) {
-    return next(err);
+    console.error('Failed to update profile:', err);
+    return redirectError(
+      req,
+      res,
+      [
+        {
+          msg: 'There was an issue updating your profile. Please try again later.',
+        },
+      ],
+      'back',
+      { first, last, pic },
+      true
+    );
   }
 }
 
@@ -168,11 +207,25 @@ async function postDelete(req, res, next) {
       if (err) {
         return next(err);
       }
-      req.flash('success', 'Your account has successfully been deleted.');
-      return res.redirect('/auth/login');
+      return redirectSuccess(
+        req,
+        res,
+        'Your account has successfully been deleted.',
+        '/auth/login'
+      );
     });
   } catch (err) {
-    next(err);
+    console.error('Failed to delete account:', err);
+    return redirectError(
+      req,
+      res,
+      [
+        {
+          msg: 'There was an issue deleting your account. Please try again later.',
+        },
+      ],
+      'back'
+    );
   }
 }
 

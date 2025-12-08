@@ -100,10 +100,31 @@ async function deleteFile(cloudinaryId, mimetype) {
   });
 }
 
+function redirectError(
+  req,
+  res,
+  errors,
+  path,
+  formData = null,
+  showModal = false
+) {
+  req.flash('errors', errors);
+  if (formData) req.flash('formData', formData);
+  if (showModal) req.flash('showModal', true);
+  return res.redirect(path);
+}
+
+function redirectSuccess(req, res, message, path) {
+  req.flash('success', message);
+  return res.redirect(path);
+}
+
 module.exports = {
   reformatSort,
   uploadImageBuffer,
   uploadFileBuffer,
   getDownloadUrl,
   deleteFile,
+  redirectError,
+  redirectSuccess,
 };

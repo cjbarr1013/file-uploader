@@ -6,6 +6,7 @@ const File = require('../../../models/file');
 const helpers = require('../../../utils/helpers');
 
 jest.mock('../../../utils/helpers', () => ({
+  ...jest.requireActual('../../../utils/helpers'),
   uploadFileBuffer: jest.fn().mockResolvedValue({
     public_id: 'file-uploader/user-files/123',
     secure_url: 'https://res.cloudinary.com/fake/file.txt',

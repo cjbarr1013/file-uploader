@@ -1,5 +1,6 @@
 const Items = require('../models/items');
 const Folder = require('../models/folder');
+const { redirectError } = require('../utils/helpers');
 
 async function getHome(req, res, next) {
   try {
@@ -20,18 +21,21 @@ async function getHome(req, res, next) {
   }
 }
 
-async function getFolder(req, res, next) {
+async function getFolder(req, res) {
   const { id } = req.params;
   const folderId = id ? Number.parseInt(id) : null;
   try {
     const folder = await Folder.findByIdWithBreadcrumbs(folderId, req.user.id);
-    if (!folder) return res.redirect('/');
+    if (!folder) {
+      return redirectError(req, res, [{ msg: 'Folder not found' }], 'back');
+    }
 
     const items = await Items.findContentByFolderId(
       req.user.id,
       folderId,
       req.user.sortPreference
     );
+
     return res.status(200).json({
       layout: 'main',
       page: 'folder',
@@ -40,11 +44,17 @@ async function getFolder(req, res, next) {
       items,
     });
   } catch (err) {
-    return next(err);
+    console.error('Failed to fetch folder content:', err);
+    return redirectError(
+      req,
+      res,
+      [{ msg: 'Unable to load folder content. Please try again later.' }],
+      '/'
+    );
   }
 }
 
-async function getFavorites(req, res, next) {
+async function getFavorites(req, res) {
   try {
     const items = await Items.findUserFavorites(
       req.user.id,
@@ -57,11 +67,17 @@ async function getFavorites(req, res, next) {
       items,
     });
   } catch (err) {
-    return next(err);
+    console.error('Failed to fetch favorites:', err);
+    return redirectError(
+      req,
+      res,
+      [{ msg: 'Unable to load favorites. Please try again later.' }],
+      '/'
+    );
   }
 }
 
-async function getSearch(req, res, next) {
+async function getSearch(req, res) {
   try {
     const items = await Items.findSearchResults(
       req.user.id,
@@ -75,7 +91,13 @@ async function getSearch(req, res, next) {
       items,
     });
   } catch (err) {
-    return next(err);
+    console.error('Failed to fetch search results:', err);
+    return redirectError(
+      req,
+      res,
+      [{ msg: 'Unable to load search results. Please try again later.' }],
+      '/'
+    );
   }
 }
 
