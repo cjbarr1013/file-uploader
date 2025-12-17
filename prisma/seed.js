@@ -8,7 +8,7 @@ async function seed(prismaClient = prisma) {
     data: {
       first: 'John',
       last: 'Smith',
-      username: 'JSmith1',
+      username: 'jsmith1',
       password: await bcrypt.hash('password', 10),
       storageUsed: 741986,
     },
@@ -18,7 +18,7 @@ async function seed(prismaClient = prisma) {
     data: {
       first: 'Craig',
       last: 'Smith',
-      username: 'CSmith1',
+      username: 'csmith1',
       password: await bcrypt.hash('password', 10),
       storageUsed: 104857595,
     },

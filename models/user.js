@@ -5,6 +5,7 @@ const User = {
   // create
   async create(userData) {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
+    userData.username = userData.username.toLowerCase();
     return prisma.user.create({
       data: {
         ...userData,
@@ -16,7 +17,7 @@ const User = {
   // find
   async findByUsername(username) {
     return prisma.user.findUnique({
-      where: { username },
+      where: { username: username.toLowerCase() },
     });
   },
 
