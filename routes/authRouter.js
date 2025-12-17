@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const passport = require('passport');
 const userController = require('../controllers/userController');
 const {
   isAuthAction,
@@ -18,17 +17,7 @@ authRouter.post(
   userController.postRegister
 );
 authRouter.get('/login', isNotAuthRoute, userController.getLogin);
-authRouter.post(
-  '/login',
-  isNotAuthAction,
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/auth/login',
-    successFlash: true,
-    failureFlash: true,
-    keepSessionInfo: true, // needed so error/success msgs persist to redirect
-  })
-);
+authRouter.post('/login', isNotAuthAction, userController.postLogin);
 authRouter.post('/logout', isAuthAction, userController.postLogout);
 
 module.exports = authRouter;

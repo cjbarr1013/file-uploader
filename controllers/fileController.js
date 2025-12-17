@@ -4,7 +4,8 @@ const {
   uploadFileBuffer,
   getDownloadUrl,
   deleteFile,
-  redirectError,
+  redirectErrorForm,
+  redirectErrorFlash,
   redirectSuccess,
 } = require('../utils/helpers');
 const File = require('../models/file');
@@ -51,7 +52,7 @@ async function getRecent(req, res) {
     });
   } catch (err) {
     console.error('Failed to fetch recent files:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Unable to load recent files. Please try again later.' }],
@@ -66,7 +67,7 @@ async function postUpload(req, res) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       errors.array(),
@@ -88,7 +89,7 @@ async function postUpload(req, res) {
     } catch (err) {
       // handle upload failure
       console.error('Failed to upload file:', err);
-      return redirectError(
+      return redirectErrorForm(
         req,
         res,
         [{ msg: 'Upload failed. Please try again.' }],
@@ -110,7 +111,12 @@ async function postUpload(req, res) {
       req.user.id
     );
 
-    return redirectSuccess(req, res, 'File successfully uploaded!', 'back');
+    return redirectSuccess(
+      req,
+      res,
+      [{ msg: 'File successfully uploaded!' }],
+      'back'
+    );
   } catch (err) {
     console.error('Failure creating file in the database:', err);
 
@@ -123,7 +129,7 @@ async function postUpload(req, res) {
       );
     }
 
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       [{ msg: 'Upload failed. Please try again.' }],
@@ -142,7 +148,7 @@ async function getDownload(req, res) {
     const file = await File.findById(fileId, req.user.id);
 
     if (!file) {
-      return redirectError(req, res, [{ msg: 'File not found' }], 'back');
+      return redirectErrorFlash(req, res, [{ msg: 'File not found' }], 'back');
     }
 
     const downloadUrl = getDownloadUrl(
@@ -154,7 +160,7 @@ async function getDownload(req, res) {
     return res.redirect(downloadUrl);
   } catch (err) {
     console.error('File failed to download', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'There was an error downloading the file.' }],
@@ -169,7 +175,7 @@ async function postEditName(req, res) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return redirectError(req, res, errors.array(), 'back');
+    return redirectErrorForm(req, res, errors.array(), 'back', { name }, true);
   }
 
   const fileId = id ? Number.parseInt(id) : null;
@@ -177,14 +183,21 @@ async function postEditName(req, res) {
   try {
     await File.update(fileId, req.user.id, { name });
 
-    return redirectSuccess(req, res, 'File name updated successfully.', 'back');
+    return redirectSuccess(
+      req,
+      res,
+      [{ msg: 'File name updated successfully.' }],
+      'back'
+    );
   } catch (err) {
     console.error('Failed to change file name', err);
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       [{ msg: 'There was an error editing the file name.' }],
-      'back'
+      'back',
+      { name },
+      true
     );
   }
 }
@@ -200,15 +213,20 @@ async function postEditLocation(req, res) {
     await File.update(fileId, req.user.id, {
       folderId: normalizedParentId,
     });
-    return redirectSuccess(req, res, 'Folder location updated', 'back');
+    return redirectSuccess(
+      req,
+      res,
+      [{ msg: 'Folder location updated' }],
+      'back'
+    );
   } catch (err) {
     console.error('Failed to update folder location', err);
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       [{ msg: 'File location failed to update.' }],
       'back',
-      {},
+      { parentId },
       true
     );
   }
@@ -226,10 +244,10 @@ async function postEditFavorite(req, res) {
 
     const flashMsg =
       isFavorite ? 'File added to favorites.' : 'File removed from favorites.';
-    return redirectSuccess(req, res, flashMsg, 'back');
+    return redirectSuccess(req, res, [{ msg: flashMsg }], 'back');
   } catch (err) {
     console.error('Failed to update favorite status:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Failure updating favorite status.' }],
@@ -245,14 +263,14 @@ async function postDelete(req, res) {
   try {
     const file = await File.findById(fileId, req.user.id);
     if (!file) {
-      return redirectError(req, res, [{ msg: 'File not found' }], 'back');
+      return redirectErrorFlash(req, res, [{ msg: 'File not found' }], 'back');
     }
 
     try {
       await deleteFile(file.cloudinaryPublicId, file.format); // delete from Cloudinary
     } catch (err) {
       console.error('Failed to delete file from cloudinary:', err);
-      return redirectError(
+      return redirectErrorFlash(
         req,
         res,
         [{ msg: 'Failed to delete file.' }],
@@ -262,10 +280,15 @@ async function postDelete(req, res) {
 
     await File.delete(fileId, req.user.id); // delete reference from db
 
-    return redirectSuccess(req, res, 'File deleted successfully.', 'back');
+    return redirectSuccess(
+      req,
+      res,
+      [{ msg: 'File deleted successfully.' }],
+      'back'
+    );
   } catch (err) {
     console.error('Failed to delete file from database:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'There was an issue deleting the file.' }],

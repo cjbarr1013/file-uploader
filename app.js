@@ -6,6 +6,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const prisma = require('./utils/db');
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
+const expressLayouts = require('express-ejs-layouts');
 const authRouter = require('./routes/authRouter');
 const favoritesRouter = require('./routes/favoritesRouter');
 const filesRouter = require('./routes/filesRouter');
@@ -59,7 +60,13 @@ app.use(flash());
 app.use((req, res, next) => {
   // locals
   res.locals.currentUser = req.user;
-  res.locals.flash = req.flash();
+  res.locals.flash = {
+    success: req.flash('success'),
+    formErrors: req.flash('formErrors'),
+    flashErrors: req.flash('flashErrors'),
+    formData: req.flash('formData')[0], // will always be a single object
+    showModal: req.flash('showModal')[0], // will always be a single boolean
+  };
 
   // session
   next();
@@ -70,6 +77,10 @@ app.use(
   '/vendor/flowbite',
   express.static(path.join(__dirname, 'node_modules/flowbite/dist'))
 );
+
+// express ejs layouts
+app.use(expressLayouts);
+// Optionally set default layout w/ app.set('layout', 'views/layouts/dashboard');
 
 // routes
 app.use('/auth', authRouter);

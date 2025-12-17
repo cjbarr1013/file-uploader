@@ -1,6 +1,6 @@
 const Items = require('../models/items');
 const Folder = require('../models/folder');
-const { redirectError } = require('../utils/helpers');
+const { redirectErrorFlash } = require('../utils/helpers');
 
 async function getHome(req, res, next) {
   try {
@@ -27,7 +27,12 @@ async function getFolder(req, res) {
   try {
     const folder = await Folder.findByIdWithBreadcrumbs(folderId, req.user.id);
     if (!folder) {
-      return redirectError(req, res, [{ msg: 'Folder not found' }], 'back');
+      return redirectErrorFlash(
+        req,
+        res,
+        [{ msg: 'Folder not found' }],
+        'back'
+      );
     }
 
     const items = await Items.findContentByFolderId(
@@ -45,7 +50,7 @@ async function getFolder(req, res) {
     });
   } catch (err) {
     console.error('Failed to fetch folder content:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Unable to load folder content. Please try again later.' }],
@@ -68,7 +73,7 @@ async function getFavorites(req, res) {
     });
   } catch (err) {
     console.error('Failed to fetch favorites:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Unable to load favorites. Please try again later.' }],
@@ -92,7 +97,7 @@ async function getSearch(req, res) {
     });
   } catch (err) {
     console.error('Failed to fetch search results:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Unable to load search results. Please try again later.' }],

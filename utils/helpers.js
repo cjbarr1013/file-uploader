@@ -100,22 +100,37 @@ async function deleteFile(cloudinaryId, mimetype) {
   });
 }
 
-function redirectError(
+function redirectErrorFlash(
   req,
   res,
-  errors,
+  errors, // must be in form [{msg: ''}] (default for express-validator)
+  path
+) {
+  req.flash('flashErrors', errors);
+  return res.redirect(path);
+}
+
+function redirectErrorForm(
+  req,
+  res,
+  errors, // must be in form [{msg: ''}] (default for express-validator)
   path,
   formData = null,
   showModal = false
 ) {
-  req.flash('errors', errors);
+  req.flash('formErrors', errors);
   if (formData) req.flash('formData', formData);
   if (showModal) req.flash('showModal', true);
   return res.redirect(path);
 }
 
-function redirectSuccess(req, res, message, path) {
-  req.flash('success', message);
+function redirectSuccess(
+  req,
+  res,
+  success, // must be in form [{msg: ''}] (default for express-validator)
+  path
+) {
+  req.flash('success', success);
   return res.redirect(path);
 }
 
@@ -125,6 +140,7 @@ module.exports = {
   uploadFileBuffer,
   getDownloadUrl,
   deleteFile,
-  redirectError,
+  redirectErrorFlash,
+  redirectErrorForm,
   redirectSuccess,
 };

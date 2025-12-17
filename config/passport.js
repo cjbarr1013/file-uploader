@@ -5,12 +5,9 @@ const User = require('../models/user');
 
 passport.use(
   new LocalStrategy(
-    { passReqToCallback: true }, // For username access in middleware
+    { passReqToCallback: true },
     async (req, username, password, done) => {
       try {
-        // For username access in middleware
-        req.session.attemptedUsername = username;
-
         const user = await User.findByUsername(username);
         if (!user) {
           return done(null, false, { message: 'User does not exist.' });
@@ -21,12 +18,10 @@ passport.use(
           return done(null, false, { message: 'Incorrect password.' });
         }
 
-        delete req.session.attemptedUsername;
         return done(null, user, {
           message: 'You have been successfully logged in!',
         });
       } catch (err) {
-        delete req.session.attemptedUsername;
         return done(err);
       }
     }

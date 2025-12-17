@@ -1,8 +1,10 @@
+const passport = require('passport');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const {
   uploadImageBuffer,
-  redirectError,
+  redirectErrorFlash,
+  redirectErrorForm,
   redirectSuccess,
 } = require('../utils/helpers');
 
@@ -60,10 +62,8 @@ const validateUsernameAndPassword = [
 ];
 
 function getRegister(req, res) {
-  // TODO: render template/page instead of json
-  return res.status(200).json({
-    layout: 'auth',
-    page: 'register',
+  return res.render('pages/register', {
+    layout: 'layouts/auth',
     title: 'Register',
   });
 }
@@ -73,13 +73,10 @@ async function postRegister(req, res) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    // TODO: render template/page instead of json
-    return res.status(400).json({
-      layout: 'auth',
-      page: 'register',
-      title: 'Register',
-      errors: errors.array(),
-      formData: { first, last, username },
+    return redirectErrorForm(req, res, errors.array(), '/auth/register', {
+      first,
+      last,
+      username,
     });
   }
 
@@ -91,7 +88,7 @@ async function postRegister(req, res) {
         return redirectSuccess(
           req,
           res,
-          'Account created successfully! Please log in to continue.',
+          [{ msg: 'Account created successfully! Please log in to continue.' }],
           '/auth/login'
         );
       }
@@ -99,7 +96,7 @@ async function postRegister(req, res) {
     });
   } catch (err) {
     console.error('Account creation failed:', err);
-    redirectError(
+    redirectErrorForm(
       req,
       res,
       [{ msg: 'Account creation failed. Please try again later.' }],
@@ -110,19 +107,41 @@ async function postRegister(req, res) {
 }
 
 function getLogin(req, res) {
-  const attemptedUsername = req.session.attemptedUsername || '';
-  delete req.session.attemptedUsername;
-
-  // TODO: render template/page instead of json
-  return res.status(200).json({
-    layout: 'auth',
-    page: 'login',
+  return res.render('pages/log-in', {
+    layout: 'layouts/auth',
     title: 'Log in',
-    formData: {
-      username: attemptedUsername,
-    },
-    flash: res.locals.flash,
   });
+}
+
+function postLogin(req, res, next) {
+  // checks local strategy in passport config, then runs this callback
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return redirectErrorForm(
+        req,
+        res,
+        [{ msg: info.message }],
+        '/auth/login',
+        { username: req.body.username }
+      );
+    }
+    // Authentication succeeded - log the user in
+    req.login(user, (err) => {
+      if (err) {
+        return redirectErrorForm(
+          req,
+          res,
+          [{ msg: 'Log in failed. Please try again later.' }],
+          '/auth/login',
+          { username: req.body.username }
+        );
+      }
+      return redirectSuccess(req, res, [{ msg: info.message }], '/');
+    });
+  })(req, res, next); // needed to immediately invoke passport.authenticate middleware
 }
 
 function postLogout(req, res, next) {
@@ -133,7 +152,7 @@ function postLogout(req, res, next) {
     redirectSuccess(
       req,
       res,
-      'You have successfully logged out.',
+      [{ msg: 'You have successfully logged out.' }],
       '/auth/login'
     );
   });
@@ -144,7 +163,7 @@ async function postEdit(req, res) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       errors.array(),
@@ -169,7 +188,7 @@ async function postEdit(req, res) {
       } catch (err) {
         // handle upload failure
         console.error('Failed to upload profile picture:', err);
-        return redirectError(
+        return redirectErrorForm(
           req,
           res,
           [{ msg: 'Image upload failed. Please try again.' }],
@@ -184,7 +203,7 @@ async function postEdit(req, res) {
     return redirectSuccess(req, res, 'Profile updated successfully!', 'back');
   } catch (err) {
     console.error('Failed to update profile:', err);
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       [
@@ -210,13 +229,13 @@ async function postDelete(req, res, next) {
       return redirectSuccess(
         req,
         res,
-        'Your account has successfully been deleted.',
+        [{ msg: 'Your account has successfully been deleted.' }],
         '/auth/login'
       );
     });
   } catch (err) {
     console.error('Failed to delete account:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [
@@ -235,6 +254,7 @@ module.exports = {
   getRegister,
   postRegister,
   getLogin,
+  postLogin,
   postLogout,
   postEdit,
   postDelete,

@@ -1,6 +1,10 @@
 const { body, validationResult } = require('express-validator');
 const Folder = require('../models/folder');
-const { redirectError, redirectSuccess } = require('../utils/helpers');
+const {
+  redirectErrorForm,
+  redirectErrorFlash,
+  redirectSuccess,
+} = require('../utils/helpers');
 
 const validateName = [
   body('name')
@@ -18,7 +22,7 @@ async function postCreate(req, res) {
   const normalizedParentId = parentId ? Number.parseInt(parentId) : null;
 
   if (!errors.isEmpty()) {
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       errors.array(),
@@ -38,7 +42,7 @@ async function postCreate(req, res) {
     return redirectSuccess(req, res, 'Folder created successfully.', 'back');
   } catch (err) {
     console.error('Failed to create folder:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Failed to create folder.' }],
@@ -53,7 +57,7 @@ async function postEditName(req, res) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return redirectError(req, res, errors.array(), 'back');
+    return redirectErrorForm(req, res, errors.array(), 'back', { name }, true);
   }
 
   const folderId = id ? Number.parseInt(id) : null;
@@ -61,14 +65,16 @@ async function postEditName(req, res) {
   try {
     await Folder.update(folderId, req.user.id, { name });
 
-    return redirectSuccess(req, res, 'Folder name updated.', 'back');
+    return redirectSuccess(req, res, [{ msg: 'Folder name updated.' }], 'back');
   } catch (err) {
     console.error('Failed to edit folder name:', err);
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       [{ msg: 'Failed to edit folder name.' }],
-      'back'
+      'back',
+      { name },
+      true
     );
   }
 }
@@ -84,14 +90,21 @@ async function postEditLocation(req, res) {
       parentId: normalizedParentId,
     });
 
-    return redirectSuccess(req, res, 'Folder location updated.', 'back');
+    return redirectSuccess(
+      req,
+      res,
+      [{ msg: 'Folder location updated.' }],
+      'back'
+    );
   } catch (err) {
     console.error('Failed to update folder location:', err);
-    return redirectError(
+    return redirectErrorForm(
       req,
       res,
       [{ msg: 'Failed to update folder location.' }],
-      'back'
+      'back',
+      { parentId },
+      true
     );
   }
 }
@@ -108,10 +121,10 @@ async function postEditFavorite(req, res) {
       isFavorite ?
         'Folder added to favorites.'
       : 'Folder removed from favorites.';
-    return redirectSuccess(req, res, flashMsg, 'back');
+    return redirectSuccess(req, res, [{ msg: flashMsg }], 'back');
   } catch (err) {
     console.error('Failed to update folder favorite status:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Failed to update favorite status of folder.' }],
@@ -126,16 +139,14 @@ async function postDelete(req, res) {
   try {
     await Folder.delete(folderId, req.user.id);
 
-    return redirectSuccess(req, res, 'Folder deleted.', 'back');
+    return redirectSuccess(req, res, [{ msg: 'Folder deleted.' }], 'back');
   } catch (err) {
     console.error('Failed to delete folder:', err);
-    return redirectError(
+    return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Failed to delete folder. Try again later.' }],
-      'back',
-      {},
-      true
+      'back'
     );
   }
 }
