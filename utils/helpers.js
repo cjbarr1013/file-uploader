@@ -1,3 +1,4 @@
+const { format } = require('date-fns');
 const cloudinary = require('../config/cloudinary');
 
 function reformatSort(sort) {
@@ -20,7 +21,12 @@ function reformatSort(sort) {
   const direction =
     allowedOrder.includes(order?.toUpperCase()) ? order.toUpperCase() : 'DESC';
 
-  return [`"${column}"`, direction];
+  // Use LOWER() for case-insensitive sorting on text columns
+  const textColumns = ['name', 'format'];
+  const sortColumn =
+    textColumns.includes(column) ? `LOWER("${column}")` : `"${column}"`;
+
+  return [sortColumn, direction];
 }
 
 async function uploadImageBuffer(buffer, username) {
@@ -64,7 +70,18 @@ async function uploadFileBuffer(buffer, cloudinaryId, mimetype) {
   });
 }
 
-function getDownloadUrl(cloudinaryId, mimetype, fileName) {
+function getImageUrl(username, version) {
+  return cloudinary.url(`file-uploader/user-images/${username}`, {
+    version, // needed to update pic when user uploads new image
+    analytics: false,
+    transformation: [
+      { width: 200, height: 200, gravity: 'faces', crop: 'fill' },
+      { quality: 'auto', fetch_format: 'auto' },
+    ],
+  });
+}
+
+function getCloudinaryUrl(cloudinaryId, mimetype) {
   let resourceType = 'raw';
   if (mimetype?.startsWith('image/')) resourceType = 'image';
   if (mimetype?.startsWith('video/')) resourceType = 'video';
@@ -73,7 +90,6 @@ function getDownloadUrl(cloudinaryId, mimetype, fileName) {
 
   return cloudinary.url(publicId, {
     resource_type: resourceType,
-    flags: `attachment:${fileName}`, // set custom filename
     secure: true, // use HTTPS
   });
 }
@@ -100,6 +116,50 @@ async function deleteFile(cloudinaryId, mimetype) {
   });
 }
 
+async function deleteMultipleFiles(files) {
+  const grouped = {
+    image: [],
+    video: [],
+    raw: [],
+  };
+
+  files.forEach((file) => {
+    if (file.mimetype.startsWith('image/')) {
+      grouped.image.push(`file-uploader/user-files/${file.cloudinaryPublicId}`);
+    } else if (file.mimetype.startsWith('video/')) {
+      grouped.video.push(`file-uploader/user-files/${file.cloudinaryPublicId}`);
+    } else {
+      grouped.raw.push(`file-uploader/user-files/${file.cloudinaryPublicId}`);
+    }
+  });
+  // delete files in parallel
+  const promises = [];
+  for (const [type, ids] of Object.entries(grouped)) {
+    if (ids.length > 0) {
+      // Handle batches of 100
+      for (let i = 0; i < ids.length; i += 100) {
+        const batch = ids.slice(i, i + 100);
+        promises.push(
+          new Promise((resolve, reject) => {
+            cloudinary.api.delete_resources(
+              batch,
+              {
+                resource_type: type,
+                invalidate: true,
+              },
+              (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+              }
+            );
+          })
+        );
+      }
+    }
+  }
+  await Promise.all(promises);
+}
+
 function redirectErrorFlash(
   req,
   res,
@@ -116,11 +176,11 @@ function redirectErrorForm(
   errors, // must be in form [{msg: ''}] (default for express-validator)
   path,
   formData = null,
-  showModal = false
+  modalId = null
 ) {
   req.flash('formErrors', errors);
   if (formData) req.flash('formData', formData);
-  if (showModal) req.flash('showModal', true);
+  if (modalId) req.flash('showModal', modalId);
   return res.redirect(path);
 }
 
@@ -134,13 +194,20 @@ function redirectSuccess(
   return res.redirect(path);
 }
 
+function formatDate(date) {
+  return format(new Date(date), 'M/d/yy');
+}
+
 module.exports = {
   reformatSort,
   uploadImageBuffer,
   uploadFileBuffer,
-  getDownloadUrl,
+  getImageUrl,
+  getCloudinaryUrl,
   deleteFile,
+  deleteMultipleFiles,
   redirectErrorFlash,
   redirectErrorForm,
   redirectSuccess,
+  formatDate,
 };

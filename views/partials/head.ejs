@@ -1,0 +1,18 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="" />
+
+  <!-- Preconnect is first page load needs optimized -->
+  <!-- <% // if (!path.startsWith('/auth')) { %>
+  <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+  <link rel="dns-prefetch" href="//res.cloudinary.com" />
+  <% // } %> -->
+
+  <!-- May be needed if page loads before user's preffered color scheme is checked -->
+  <script src="/js/darkModePreCheck.js"></script>
+
+  <link href="/styles/output.css" rel="stylesheet" />
+  <script src="/vendor/flowbite/flowbite.min.js" defer></script>
+  <title><%= title %></title>
+</head>

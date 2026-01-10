@@ -9,6 +9,21 @@ const Folder = {
   },
 
   // find
+  async findAll(userId) {
+    return prisma.folder.findMany({
+      where: {
+        creatorId: userId,
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
+  },
+
   async findById(folderId, userId) {
     return prisma.folder.findUnique({
       where: {
@@ -58,28 +73,67 @@ const Folder = {
   async findByIdWithBreadcrumbs(folderId, userId) {
     if (folderId === null) return null;
 
-    return prisma.folder.findUnique({
+    const parents = [];
+    let currentFolder = await prisma.folder.findUnique({
       where: {
         id: folderId,
         creatorId: userId,
       },
       select: {
-        id: true,
-        name: true,
         parent: {
           select: {
             id: true,
             name: true,
-            parent: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
           },
         },
       },
     });
+
+    while (currentFolder?.parent) {
+      parents.push(currentFolder.parent);
+      currentFolder = await prisma.folder.findUnique({
+        where: {
+          id: currentFolder.parent.id,
+          creatorId: userId,
+        },
+        select: {
+          parent: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+    }
+
+    return parents.reverse(); // [{id: 'direct-parent', name: '...'}, {id: 'grandparent', name: '...'}, ...]
+  },
+
+  async findAllChildFiles(folderId, userId) {
+    const folder = await prisma.folder.findUnique({
+      where: {
+        id: folderId,
+        creatorId: userId,
+      },
+      include: {
+        files: true,
+        subfolders: true,
+      },
+    });
+
+    if (!folder) return [];
+
+    // Start with files directly in this folder
+    let allFiles = [...folder.files];
+
+    // Recursively get files from each subfolder
+    for (const subfolder of folder.subfolders) {
+      const childFiles = await this.findAllChildFiles(subfolder.id, userId);
+      allFiles = allFiles.concat(childFiles);
+    }
+
+    return allFiles;
   },
 
   // update

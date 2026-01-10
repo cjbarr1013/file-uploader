@@ -1,4 +1,5 @@
 const multer = require('multer');
+const { redirectErrorForm } = require('../utils/helpers');
 
 const storage = multer.memoryStorage();
 
@@ -20,26 +21,55 @@ const parseFile = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB for general files
 }).single('upload');
 
-const handleMulterError = (err, req, res, next) => {
+const handlePicMulterError = (err, req, res, next) => {
   const { first, last, pic } = req.body;
   // handle file size too big error
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {
-      req.flash('errors', [{ msg: 'File too large. Maximum size is 10MB.' }]);
-      req.flash('formData', { first, last, pic });
-      req.flash('showModal', true);
-      return res.redirect('back');
+      return redirectErrorForm(
+        req,
+        res,
+        [{ msg: 'File too large. Maximum size is 10MB.' }],
+        req.body.returnTo || '/',
+        { first, last, pic },
+        'edit-profile-modal'
+      );
     }
     if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-      req.flash('errors', [
-        { msg: 'Invalid file type. Only JPEG, PNG, and WebP allowed.' },
-      ]);
-      req.flash('formData', { first, last, pic });
-      req.flash('showModal', true);
-      return res.redirect('back');
+      return redirectErrorForm(
+        req,
+        res,
+        [{ msg: 'Invalid file type. Only JPEG, PNG, and WebP allowed.' }],
+        req.body.returnTo || '/',
+        { first, last, pic },
+        'edit-profile-modal'
+      );
     }
   }
   return next(err);
 };
 
-module.exports = { parseImageFile, parseFile, handleMulterError };
+const handleUploadMulterError = (err, req, res, next) => {
+  const { upload, parentId } = req.body;
+  // handle file size too big error
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return redirectErrorForm(
+        req,
+        res,
+        [{ msg: 'File too large. Maximum size is 10MB.' }],
+        req.body.returnTo || '/',
+        { upload, parentId },
+        'upload-file-modal'
+      );
+    }
+  }
+  return next(err);
+};
+
+module.exports = {
+  parseImageFile,
+  parseFile,
+  handlePicMulterError,
+  handleUploadMulterError,
+};

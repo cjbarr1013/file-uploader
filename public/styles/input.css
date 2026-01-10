@@ -1,0 +1,110 @@
+@import 'tailwindcss';
+
+@import 'flowbite/src/themes/default';
+@plugin 'flowbite/plugin';
+@source '../../node_modules/flowbite';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* If custom CSS classes are needed, write in separate file and import */
+
+.style-required:after {
+  @apply ml-0.5 text-red-500 content-['*'];
+}
+
+@theme {
+  /* Override or define utility classes and theme variables */
+
+  --color-body-lm: var(--color-gray-900);
+  --color-body-soft-lm: var(--color-gray-800);
+  --color-heading-lm: var(--color-stone-950);
+  --color-body-dm: var(--color-gray-900);
+  --color-body-soft-dm: var(--color-gray-800);
+  --color-heading-lm: var(--color-stone-950);
+
+  --color-background-lm: var(--color-white);
+  --color-background-dm: var(--color-gray-800);
+
+  /* 
+  --breakpoint-xs: ;
+  --breakpoint-2xl: ;
+  --breakpoint-3xl: ;
+
+  --font-sans: ;
+  --font-serif: ;
+  --font-mono: ;
+
+  --color-body-lm: var(--color-gray-900);
+  --color-body-soft-lm: var(--color-gray-800);
+  --color-heading-lm: var(--color-stone-950);
+  --color-body-dm: var(--color-gray-900);
+  --color-body-soft-dm: var(--color-gray-800);
+  --color-heading-lm: var(--color-stone-950);
+
+  --color-background-lm: var(--color-white);
+  --color-background-dm: var(--color-gray-800);
+
+  --color-primary-softer: var(--color-blue-50);
+  --color-primary-soft: var(--color-blue-100);
+  --color-primary: var(--color-blue-700);
+  --color-primary-medium: var(--color-blue-200);
+  --color-primary-strong: var(--color-blue-800);
+  --color-secondary-softer: var(--color-blue-50);
+  --color-secondary-soft: var(--color-blue-100);
+  --color-secondary: var(--color-blue-700);
+  --color-secondary-medium: var(--color-blue-200);
+  --color-secondary-strong: var(--color-blue-800);
+  --color-tertiary-softer: var(--color-blue-50);
+  --color-tertiary-soft: var(--color-blue-100);
+  --color-tertiary: var(--color-blue-700);
+  --color-tertiary-medium: var(--color-blue-200);
+  --color-tertiary-strong: var(--color-blue-800);
+
+  --color-border-soft: ;
+  --color-border: ;
+  --color-border-strong: ;
+  --color-shadow: ;
+
+  --color-success-soft: var(--color-emerald-50);
+  --color-success: var(--color-emerald-700);
+  --color-success-strong: var(--color-emerald-800);
+  --color-danger-soft: var(--color-rose-50);
+  --color-danger: var(--color-rose-700);
+  --color-danger-strong: var(--color-rose-800);
+  --color-warning-soft: var(--color-orange-50);
+  --color-warning: var(--color-orange-500);
+  --color-warning-strong: var(--color-orange-700);
+  --color-disabled: var(--color-gray-100);
+
+  --spacing-header: ;
+  --spacing-sidebar: ;
+
+  --radius-*: ;
+  
+  --shadow-soft: ;
+  --shadow-normal: ;
+  --shadow-strong: ;
+  */
+}
+
+@layer base {
+  /* If you want to add your own default base styles for specific HTML elements,
+  use the @layer directive to add those styles to Tailwind's 'base' layer 
+  i.e. h1, h2, etc. */
+
+  button {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  /* Use the components layer for any more complicated classes you want to 
+  add to your project that you'd still like to be able to override with utility classes. 
+  i.e. classes like 'card', 'btn', 'badge' */
+}
+
+/* @utility tab-4 {
+  Use the @utility directive to add custom utilities to your project that work with 
+  variants like 'hover', 'focus' and 'lg'
+  tab-size: 4;
+} */

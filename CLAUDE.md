@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Interaction Style
+
+- Always explain the problem and solution options fully before implementing
+- Wait for user confirmation before making code changes
+- When asked a question, answer it completely before suggesting or making edits
+
 ## Project Overview
 
 A file storage platform (similar to Google Drive/Dropbox) built with Node.js/Express and PostgreSQL. Users can upload files, organize them in folders, track storage usage, and manage their content.
@@ -47,6 +53,7 @@ A file storage platform (similar to Google Drive/Dropbox) built with Node.js/Exp
 - Use descriptive variable names (e.g., `hashedPassword`, not `hp`)
 - Always use `async/await` for asynchronous operations
 - Comment the "why", not the "what"
+- **Mobile-first responsive design** - All frontend development uses mobile-first approach with Tailwind CSS breakpoints (default styles for mobile, then `sm:`, `md:`, `lg:`, `xl:` for larger screens)
 
 ## Development Commands
 
@@ -160,6 +167,103 @@ Files are stored in Cloudinary, not the local filesystem:
 - Four middleware guards in `middleware/auth.js`:
   - `isAuthRoute` / `isAuthAction` - protect authenticated routes/actions
   - `isNotAuthRoute` / `isNotAuthAction` - prevent logged-in users from accessing login/register
+- **Username case-insensitivity**: All usernames are converted to lowercase on registration and lookup (`User.create()` and `User.findByUsername()`)
+
+**Passport Custom Callback Pattern**
+
+Instead of using passport's built-in redirect/flash handling, we use a custom callback to maintain consistent error formatting:
+
+```javascript
+// controllers/userController.js
+function postLogin(req, res, next) {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+
+    if (!user) {
+      // Auth failed - manually format error to match validation errors
+      return redirectErrorForm(
+        req, res,
+        [{ msg: info.message }],  // Consistent {msg: '...'} format
+        '/auth/login',
+        { username: req.body.username }  // Preserve username in form
+      );
+    }
+
+    // Auth succeeded - manually log user in
+    req.login(user, (err) => {
+      if (err) return next(err);
+      req.flash('success', [{ msg: info.message }]);
+      return res.redirect('/');
+    });
+  })(req, res, next);  // Immediately invoke the middleware
+}
+```
+
+The custom callback receives:
+- `err` - Database or system errors
+- `user` - The authenticated user object (or `false` if auth failed)
+- `info` - Message object from strategy: `{ message: 'User does not exist.' }`
+
+**Flash Message Organization**
+
+We use separate flash keys for different purposes:
+
+- `formErrors` - Form validation errors (express-validator or manual)
+- `flashErrors` - General flash errors (non-form errors)
+- `formData` - Form data to repopulate fields after errors
+- `success` - Success messages
+- `showModal` - Modal ID string to show on page reload (e.g., `'create-folder-modal'`)
+
+All error/success messages use consistent `{msg: '...'}` format to match express-validator.
+
+**Flowbite JavaScript API**
+
+Flowbite is loaded with `defer` for optimal performance and auto-initializes components that have trigger elements with data attributes (e.g., `data-modal-toggle`, `data-dropdown-toggle`).
+
+**Accessing Component Instances:**
+
+```javascript
+// Use FlowbiteInstances.getInstance() to access initialized components
+const modal = FlowbiteInstances.getInstance('Modal', 'modal-id');
+modal.show();
+modal.hide();
+modal.toggle();
+```
+
+**Key Requirements:**
+
+1. **Script Loading**: Flowbite must be loaded with `defer` in `<head>`, and scripts that use Flowbite should also use `defer` or run after the `load` event
+2. **Auto-initialization**: Flowbite automatically initializes components when it finds trigger elements with data attributes like `data-modal-toggle="modal-id"`
+3. **Instance Availability**: Use `window.addEventListener('load')` to ensure instances are initialized before accessing them
+
+**Modal Auto-Show Pattern:**
+
+To show a modal on page reload after form errors:
+
+1. Pass modal ID through flash: `redirectErrorForm(req, res, errors, '/', formData, 'modal-id')`
+2. Add modal ID to body: `<body data-show-modal="<%= flash.showModal %>">`
+3. Use client-side script to show modal:
+
+```javascript
+// public/js/showModalCheck.js
+window.addEventListener('load', function () {
+  const modalId = document.body.dataset.showModal;
+  if (modalId) {
+    const modal = FlowbiteInstances.getInstance('Modal', modalId);
+    if (modal) modal.show();
+  }
+});
+```
+
+**Ensuring Components Initialize:**
+
+Flowbite only initializes components that have trigger buttons with `data-modal-target` or `data-modal-toggle` attributes. For modals without visible triggers, add hidden trigger buttons:
+
+```html
+<div class="hidden">
+  <button data-modal-target="modal-id" data-modal-toggle="modal-id"></button>
+</div>
+```
 
 **File Upload Flow**
 
@@ -248,8 +352,41 @@ router.post('/upload', parseFile, validateUpload, postUpload);
 `req.file.size` from multer is in bytes. File size limit: `10 * 1024 * 1024` (10MB).
 
 **Flash Messages**
-Use `req.flash('errors', [...])` for validation errors (array of objects with `msg` property).
-Use `req.flash('success', '...')` for success messages (string).
+
+Flash messages are organized by purpose and retrieved in middleware:
+
+```javascript
+// app.js - Flash middleware
+app.use((req, res, next) => {
+  res.locals.flash = {
+    formErrors: req.flash('formErrors'),      // Array - keep as is
+    flashErrors: req.flash('flashErrors'),    // Array - keep as is
+    success: req.flash('success'),            // Array - keep as is
+    formData: req.flash('formData')[0],       // Single object - extract with [0]
+    showModal: req.flash('showModal')[0],     // Single boolean - extract with [0]
+  };
+  next();
+});
+```
+
+**Why `[0]`?** `req.flash()` always returns an array, even for single values. Extract single values with `[0]`.
+
+**Helper Functions** (`utils/helpers.js`):
+
+```javascript
+// For form errors with form data preservation and optional modal display
+redirectErrorForm(req, res, errors, path, formData = null, modalId = null)
+
+// For general flash errors without form data
+redirectErrorFlash(req, res, errors, path)
+
+// For success messages
+redirectSuccess(req, res, success, path)
+```
+
+All messages must be in `[{msg: '...'}]` format (arrays of objects with `msg` property).
+
+When `modalId` is provided in `redirectErrorForm`, the specified modal will automatically open on page reload to display the errors.
 
 ## Environment Variables
 

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const fileController = require('../controllers/fileController');
 const { isAuthAction, isAuthRoute } = require('../middleware/auth');
-const { parseFile, handleMulterError } = require('../middleware/multer');
+const { parseFile, handleUploadMulterError } = require('../middleware/multer');
 const filesRouter = Router();
 
 // routes
@@ -11,7 +11,7 @@ filesRouter.post(
   '/upload',
   isAuthAction,
   parseFile,
-  handleMulterError,
+  handleUploadMulterError,
   fileController.validateUpload,
   fileController.postUpload
 );

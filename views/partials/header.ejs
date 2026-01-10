@@ -1,0 +1,20 @@
+<nav class="z-20 col-span-full border-b bg-white px-3 py-2 sm:col-start-2">
+  <div class="grid grid-cols-2 items-center gap-4">
+    <div class="flex sm:hidden">
+      <%- include('../components/button-sidebar-toggle') %>
+      <a href="/" class="flex items-center">
+        <h1 class="text-3xl">My Drive</h1>
+      </a>
+    </div>
+    <div
+      class="col-span-full row-start-2 justify-center sm:col-span-1 sm:row-start-1 sm:justify-start"
+    >
+      <%- include('../forms/search') %>
+    </div>
+    <div class="col-start-2 row-start-1 flex justify-end">
+      <!--prettier-ignore-->
+      <%- include('../components/button-dark-mode') %>
+    <%- include('../components/dropdown-user') %>
+    </div>
+  </div>
+</nav>

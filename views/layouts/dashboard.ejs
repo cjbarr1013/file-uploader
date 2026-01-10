@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" class="min-w-80 text-gray-900">
+  <%- include('../partials/head') %>
+  <body
+    class="grid min-h-screen grid-rows-[auto_1fr] sm:grid-cols-[auto_1fr] sm:grid-rows-[auto_1fr]"
+    <% if (flash.showModal) { %>
+      data-show-modal="<%= flash.showModal %>"
+    <% } %>
+  >
+    <!--prettier-ignore-->
+    <%- include('../partials/sidebar') %>
+    <%- include('../partials/header') %>
+    <main class="relative">
+      <%- include('../partials/flash') %>
+      <%- body %>
+    </main>
+    <%- include('../components/button-add-item') %>
+    <%- include('../partials/dialogs') %>
+
+    <script src="/js/darkModeToggle.js"></script>
+    <script src="/js/showModalCheck.js" defer></script>
+    <script src="/js/initItemActionButtons.js" defer></script>
+
+  </body>
+</html>

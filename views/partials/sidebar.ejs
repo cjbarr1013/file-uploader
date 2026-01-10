@@ -1,0 +1,22 @@
+<aside
+  id="sidebar-drawer"
+  class="fixed left-0 top-0 z-40 h-full w-64 -translate-x-full transition-transform sm:static sm:row-span-2 sm:translate-x-0"
+  aria-label="sidebar"
+  tabindex="-1"
+  aria-labelledby="sidebar-label"
+>
+  <div
+    class="flex h-full flex-col justify-between overflow-y-auto border-r bg-white px-3 py-4"
+  >
+    <div class="flex flex-col gap-4">
+      <!--page-title-->
+      <a href="/" class="hidden sm:flex sm:items-center">
+        <h1 class="text-3xl">My Drive</h1>
+      </a>
+      <!--nav-links-->
+      <%- include('../components/sidebar-links') %>
+    </div>
+    <!--storage-meter-->
+    <%- include('../components/storage-meter') %>
+  </div>
+</aside>

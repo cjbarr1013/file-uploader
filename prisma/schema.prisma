@@ -49,6 +49,7 @@ model File {
   name               String
   size               Int
   format             String
+  mimetype           String
   favorite           Boolean  @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt

@@ -12,7 +12,12 @@ foldersRouter.post(
   folderController.postCreate
 );
 
-foldersRouter.get('/:id', isAuthRoute, itemsController.getFolder);
+foldersRouter.get(
+  '/:id',
+  isAuthRoute,
+  folderController.validateFolderId,
+  itemsController.getFolder
+);
 
 foldersRouter.post(
   '/:id/edit/name',

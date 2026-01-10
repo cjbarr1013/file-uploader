@@ -2,7 +2,7 @@ const { body, validationResult } = require('express-validator');
 const crypto = require('crypto');
 const {
   uploadFileBuffer,
-  getDownloadUrl,
+  getCloudinaryUrl,
   deleteFile,
   redirectErrorForm,
   redirectErrorFlash,
@@ -32,7 +32,7 @@ const validateUpload = [
 ];
 
 const validateName = [
-  body('name')
+  body('itemName')
     .trim()
     .notEmpty()
     .withMessage('File must have a name.')
@@ -43,12 +43,11 @@ const validateName = [
 
 async function getRecent(req, res) {
   try {
-    const files = await File.findRecent(req.user.id);
-    return res.status(200).json({
-      layout: 'main',
-      page: 'recent',
-      title: 'Recent files',
-      files,
+    const items = await File.findRecent(req.user.id);
+    return res.render('pages/recent', {
+      layout: 'layouts/dashboard',
+      title: `Files Updated Last 30 Days`,
+      items,
     });
   } catch (err) {
     console.error('Failed to fetch recent files:', err);
@@ -71,9 +70,9 @@ async function postUpload(req, res) {
       req,
       res,
       errors.array(),
-      'back',
+      req.body.returnTo || '/',
       { upload, parentId },
-      true
+      'upload-file-modal'
     );
   }
 
@@ -93,18 +92,19 @@ async function postUpload(req, res) {
         req,
         res,
         [{ msg: 'Upload failed. Please try again.' }],
-        'back',
+        req.body.returnTo || '/',
         { upload, parentId },
-        true
+        'upload-file-modal'
       );
     }
 
     await File.create(
       {
         cloudinaryPublicId,
-        name: req.file.originalname,
+        name: req.file.originalname.split('.')[0],
         size: req.file.size,
-        format: req.file.mimetype,
+        format: req.file.originalname.split('.').at(-1),
+        mimetype: req.file.mimetype,
         folderId: normalizedParentId,
         creatorId: req.user.id,
       },
@@ -115,7 +115,7 @@ async function postUpload(req, res) {
       req,
       res,
       [{ msg: 'File successfully uploaded!' }],
-      'back'
+      req.body.returnTo || '/'
     );
   } catch (err) {
     console.error('Failure creating file in the database:', err);
@@ -133,9 +133,9 @@ async function postUpload(req, res) {
       req,
       res,
       [{ msg: 'Upload failed. Please try again.' }],
-      'back',
+      req.body.returnTo || '/',
       { upload, parentId },
-      true
+      'upload-file-modal'
     );
   }
 }
@@ -148,46 +148,76 @@ async function getDownload(req, res) {
     const file = await File.findById(fileId, req.user.id);
 
     if (!file) {
-      return redirectErrorFlash(req, res, [{ msg: 'File not found' }], 'back');
+      return redirectErrorFlash(
+        req,
+        res,
+        [{ msg: 'File not found.' }],
+        req.query.returnTo || '/'
+      );
     }
 
-    const downloadUrl = getDownloadUrl(
+    // Get Cloudinary URL without attachment flag
+    const cloudinaryUrl = getCloudinaryUrl(
       file.cloudinaryPublicId,
-      file.format,
-      file.name
+      file.mimetype
     );
 
-    return res.redirect(downloadUrl);
+    // Fetch file from Cloudinary
+    const response = await fetch(cloudinaryUrl);
+    if (!response.ok) {
+      throw new Error(`Cloudinary fetch failed: ${response.status}`);
+    }
+
+    // Get the file buffer
+    const buffer = Buffer.from(await response.arrayBuffer());
+
+    // Send with proper filename in headers
+    const fullFileName = `${file.name}.${file.format}`;
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${fullFileName}"`
+    );
+    res.setHeader('Content-Type', file.mimetype);
+    res.setHeader('Content-Length', buffer.length);
+
+    return res.send(buffer);
   } catch (err) {
     console.error('File failed to download', err);
     return redirectErrorFlash(
       req,
       res,
       [{ msg: 'There was an error downloading the file.' }],
-      'back'
+      req.query.returnTo || '/'
     );
   }
 }
 
 async function postEditName(req, res) {
-  const { name } = req.body;
+  const { itemName } = req.body;
   const { id } = req.params;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return redirectErrorForm(req, res, errors.array(), 'back', { name }, true);
+    return redirectErrorForm(
+      req,
+      res,
+      errors.array(),
+      req.body.returnTo || '/',
+      { itemName },
+      'edit-name-modal'
+    );
   }
 
   const fileId = id ? Number.parseInt(id) : null;
 
   try {
-    await File.update(fileId, req.user.id, { name });
+    await File.update(fileId, req.user.id, { name: itemName });
 
     return redirectSuccess(
       req,
       res,
       [{ msg: 'File name updated successfully.' }],
-      'back'
+      req.body.returnTo || '/'
     );
   } catch (err) {
     console.error('Failed to change file name', err);
@@ -195,9 +225,9 @@ async function postEditName(req, res) {
       req,
       res,
       [{ msg: 'There was an error editing the file name.' }],
-      'back',
-      { name },
-      true
+      req.body.returnTo || '/',
+      { itemName },
+      'edit-name-modal'
     );
   }
 }
@@ -217,7 +247,7 @@ async function postEditLocation(req, res) {
       req,
       res,
       [{ msg: 'Folder location updated' }],
-      'back'
+      req.body.returnTo || '/'
     );
   } catch (err) {
     console.error('Failed to update folder location', err);
@@ -225,9 +255,9 @@ async function postEditLocation(req, res) {
       req,
       res,
       [{ msg: 'File location failed to update.' }],
-      'back',
+      req.body.returnTo || '/',
       { parentId },
-      true
+      'edit-location-modal'
     );
   }
 }
@@ -238,20 +268,28 @@ async function postEditFavorite(req, res) {
 
   try {
     const file = await File.findById(fileId, req.user.id);
-    const isFavorite = !file.favorite;
+    const isFavorite = !file.favorite; // toggle favorite status
 
     await File.update(fileId, req.user.id, { favorite: isFavorite });
 
     const flashMsg =
-      isFavorite ? 'File added to favorites.' : 'File removed from favorites.';
-    return redirectSuccess(req, res, [{ msg: flashMsg }], 'back');
+      isFavorite ?
+        `${file.name} added to favorites.`
+      : `${file.name} removed from favorites.`;
+
+    return redirectSuccess(
+      req,
+      res,
+      [{ msg: flashMsg }],
+      req.body.returnTo || '/'
+    );
   } catch (err) {
     console.error('Failed to update favorite status:', err);
     return redirectErrorFlash(
       req,
       res,
       [{ msg: 'Failure updating favorite status.' }],
-      'back'
+      req.body.returnTo || '/'
     );
   }
 }
@@ -263,18 +301,23 @@ async function postDelete(req, res) {
   try {
     const file = await File.findById(fileId, req.user.id);
     if (!file) {
-      return redirectErrorFlash(req, res, [{ msg: 'File not found' }], 'back');
+      return redirectErrorFlash(
+        req,
+        res,
+        [{ msg: 'File not found' }],
+        req.body.returnTo || '/'
+      );
     }
 
     try {
-      await deleteFile(file.cloudinaryPublicId, file.format); // delete from Cloudinary
+      await deleteFile(file.cloudinaryPublicId, file.mimetype); // delete from Cloudinary
     } catch (err) {
       console.error('Failed to delete file from cloudinary:', err);
       return redirectErrorFlash(
         req,
         res,
         [{ msg: 'Failed to delete file.' }],
-        'back'
+        req.body.returnTo || '/'
       );
     }
 
@@ -284,7 +327,7 @@ async function postDelete(req, res) {
       req,
       res,
       [{ msg: 'File deleted successfully.' }],
-      'back'
+      req.body.returnTo || '/'
     );
   } catch (err) {
     console.error('Failed to delete file from database:', err);
@@ -292,7 +335,7 @@ async function postDelete(req, res) {
       req,
       res,
       [{ msg: 'There was an issue deleting the file.' }],
-      'back'
+      req.body.returnTo || '/'
     );
   }
 }

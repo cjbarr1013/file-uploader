@@ -1,0 +1,46 @@
+<ul class="flex flex-col gap-2">
+  <% items.forEach(item => { %>
+    <li class="border flex items-center">
+
+      <!--prettier-ignore-->
+      <% if (item.type === 'folder') { %>
+        <a href="/folders/<%= item.id %>" class="flex w-[90%] items-center justify-between p-2">
+      <% } else { %>
+        <div class="flex w-[90%] items-center justify-between p-2">
+      <% } %>
+
+          <div class="flex w-[70%] gap-2">
+            <div class="flex items-center">
+              <!--prettier-ignore-->
+              <% if (item.type === 'folder') { %> 
+                <%- include('../components/icon-folder') %> 
+              <% } else if (item.type === 'file') { %> 
+                <%- include('../components/icon-file') %> 
+              <% } %>
+            </div>
+            <div class="w-full md:flex md:justify-between ">
+              <h3 class="font-semibold"><%= item.name %></h3>
+              <% if (item.format !== null) { %>
+              <div class="flex gap-2">
+                <p><%= (Number(item.size) / 1048576).toFixed(2) %> MB</p>
+                <span>·</span>
+                <p><%= item.format.toUpperCase() %></p>
+              </div>
+              <span></span>
+              <% } %>
+            </div>
+          </div>
+          <p class="w-[30%]"><%= formatDate(item.updatedAt) %></p>
+
+    <!--prettier-ignore-->
+    <% if (item.type === 'folder') { %>
+      </a>
+    <% } else { %>
+      </div>
+    <% } %>
+
+    <%- include('../components/dropdown-item', {item}) %>
+
+    </li>
+  <% }); %>
+</ul>

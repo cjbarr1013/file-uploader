@@ -1,0 +1,57 @@
+<div data-dial-init class="group fixed bottom-4 end-4">
+  <div
+    id="speed-dial-menu-dropdown"
+    class="bg-neutral-primary-medium border-default-medium rounded-base shadow-xs mb-4 flex hidden flex-col justify-end space-y-2 border"
+  >
+    <ul class="text-body p-2 text-sm font-medium">
+      <li>
+        <button
+          data-modal-target="upload-file-modal"
+          data-modal-toggle="upload-file-modal"
+          type="button"
+          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center gap-1 rounded p-2"
+        >
+          <%- include('icon-file') %>
+          <span class="whitespace-nowrap text-sm font-medium">Upload File</span>
+        </button>
+      </li>
+      <li>
+        <button
+          data-modal-target="create-folder-modal"
+          data-modal-toggle="create-folder-modal"
+          type="button"
+          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center gap-1 rounded p-2"
+        >
+          <%- include('icon-folder') %>
+          <span class="whitespace-nowrap text-sm font-medium">New Folder</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+  <button
+    type="button"
+    data-dial-toggle="speed-dial-menu-dropdown"
+    aria-controls="speed-dial-menu-dropdown"
+    aria-expanded="false"
+    class="bg-brand hover:bg-brand-strong focus:ring-brand-medium ml-auto flex h-14 w-14 items-center justify-center rounded-full text-white focus:outline-none focus:ring-4"
+  >
+    <svg
+      class="h-5 w-5 transition-transform group-hover:rotate-45"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M5 12h14m-7 7V5"
+      />
+    </svg>
+    <span class="sr-only">Open actions menu</span>
+  </button>
+</div>

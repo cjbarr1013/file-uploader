@@ -1,0 +1,34 @@
+<form
+  id="edit-location-form"
+  action=""
+  method="post"
+  class="flex flex-col gap-4"
+>
+  <!--prettier-ignore-->
+  <%- include('../components/form-hidden-input') %>
+  <%- include('../components/form-errors') %>
+  <select id="newParentId" name="parentId" class="">
+    <option value="" selected>Home</option>
+    <hr />
+    <optgroup label="Recent Folders">
+      <% folderList.forEach(folder => { %>
+      <option value="<%= folder.id %>"><%= folder.name %></option>
+      <% }); %>
+    </optgroup>
+  </select>
+  <div>
+    <button
+      type="submit"
+      class="bg-brand hover:bg-brand-strong focus:ring-brand-medium shadow-xs rounded-base box-border border border-transparent px-4 py-2.5 text-sm font-medium leading-5 text-white focus:outline-none focus:ring-4"
+    >
+      Submit
+    </button>
+    <button
+      data-modal-hide="<%= modalId %>"
+      type="button"
+      class="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary shadow-xs rounded-base box-border border px-4 py-2.5 text-sm font-medium leading-5 focus:outline-none focus:ring-4"
+    >
+      Cancel
+    </button>
+  </div>
+</form>

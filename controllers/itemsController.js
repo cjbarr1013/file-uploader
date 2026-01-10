@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 const Items = require('../models/items');
 const Folder = require('../models/folder');
 const { redirectErrorFlash } = require('../utils/helpers');
@@ -9,11 +10,10 @@ async function getHome(req, res, next) {
       null,
       req.user.sortPreference
     );
-    return res.status(200).json({
-      layout: 'main',
-      page: 'folder',
+    return res.render('pages/folder', {
+      layout: 'layouts/dashboard',
       title: 'Home',
-      breadcrumbs: null,
+      breadcrumb: null,
       items,
     });
   } catch (err) {
@@ -23,17 +23,23 @@ async function getHome(req, res, next) {
 
 async function getFolder(req, res) {
   const { id } = req.params;
-  const folderId = id ? Number.parseInt(id) : null;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return redirectErrorFlash(req, res, errors.array(), '/');
+  }
+
   try {
-    const folder = await Folder.findByIdWithBreadcrumbs(folderId, req.user.id);
+    const folderId = id ? Number.parseInt(id) : null;
+    const folder = await Folder.findById(folderId, req.user.id);
     if (!folder) {
-      return redirectErrorFlash(
-        req,
-        res,
-        [{ msg: 'Folder not found' }],
-        'back'
-      );
+      return redirectErrorFlash(req, res, [{ msg: 'Folder not found' }], '/');
     }
+
+    const breadcrumb = await Folder.findByIdWithBreadcrumbs(
+      folderId,
+      req.user.id
+    );
 
     const items = await Items.findContentByFolderId(
       req.user.id,
@@ -41,11 +47,10 @@ async function getFolder(req, res) {
       req.user.sortPreference
     );
 
-    return res.status(200).json({
-      layout: 'main',
-      page: 'folder',
+    return res.render('pages/folder', {
+      layout: 'layouts/dashboard',
       title: folder.name,
-      breadcrumbs: folder.parent,
+      breadcrumb,
       items,
     });
   } catch (err) {
@@ -65,9 +70,8 @@ async function getFavorites(req, res) {
       req.user.id,
       req.user.sortPreference
     );
-    return res.status(200).json({
-      layout: 'main',
-      page: 'favorites',
+    return res.render('pages/favorites', {
+      layout: 'layouts/dashboard',
       title: 'Favorites',
       items,
     });
@@ -89,9 +93,8 @@ async function getSearch(req, res) {
       req.query.q,
       req.user.sortPreference
     );
-    return res.status(200).json({
-      layout: 'main',
-      page: 'search',
+    return res.render('pages/search', {
+      layout: 'layouts/dashboard',
       title: `Search Results for: ${req.query.q}`,
       items,
     });

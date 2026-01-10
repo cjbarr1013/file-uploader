@@ -167,9 +167,9 @@ async function postEdit(req, res) {
       req,
       res,
       errors.array(),
-      'back',
+      req.body.returnTo || '/',
       { first, last, pic },
-      true
+      'edit-profile-modal'
     );
   }
 
@@ -192,15 +192,20 @@ async function postEdit(req, res) {
           req,
           res,
           [{ msg: 'Image upload failed. Please try again.' }],
-          'back',
+          req.body.returnTo || '/',
           { first, last, pic },
-          true
+          'edit-profile-modal'
         );
       }
     }
 
     await User.updateProfile(req.user.id, { first, last, hasPic, picVersion });
-    return redirectSuccess(req, res, 'Profile updated successfully!', 'back');
+    return redirectSuccess(
+      req,
+      res,
+      [{ msg: 'Profile updated successfully!' }],
+      req.body.returnTo || '/'
+    );
   } catch (err) {
     console.error('Failed to update profile:', err);
     return redirectErrorForm(
@@ -211,9 +216,9 @@ async function postEdit(req, res) {
           msg: 'There was an issue updating your profile. Please try again later.',
         },
       ],
-      'back',
+      req.body.returnTo || '/',
       { first, last, pic },
-      true
+      'edit-profile-modal'
     );
   }
 }
@@ -243,7 +248,27 @@ async function postDelete(req, res, next) {
           msg: 'There was an issue deleting your account. Please try again later.',
         },
       ],
-      'back'
+      'back' // req.body.returnTo || '/' when hidden form implemented
+    );
+  }
+}
+
+async function postSortPreference(req, res) {
+  try {
+    await User.updateProfile(req.user.id, {
+      sortPreference: req.body.sortPreference,
+    });
+    return res.redirect(req.body.returnTo || '/');
+  } catch {
+    return redirectErrorFlash(
+      req,
+      res,
+      [
+        {
+          msg: 'That action could not be completed. Please try again later.',
+        },
+      ],
+      req.body.returnTo || '/'
     );
   }
 }
@@ -258,4 +283,5 @@ module.exports = {
   postLogout,
   postEdit,
   postDelete,
+  postSortPreference,
 };

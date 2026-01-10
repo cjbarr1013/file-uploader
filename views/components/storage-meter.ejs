@@ -1,0 +1,19 @@
+<!--prettier-ignore-->
+<% const storageUsedMB = (Number(currentUser.storageUsed) / 1048576).toFixed(2) %> 
+<% const storageUsedPercentage = (Number(currentUser.storageUsed) / (100 * 1048576) * 100).toFixed(2) %>
+
+<div class="flex flex-col gap-2">
+  <h3 class="text-heading font-semibold">Available storage</h3>
+  <p>
+    You are currently using
+    <span class="text-heading font-semibold"><%= storageUsedMB %></span>
+    of <span class="text-heading font-semibold">100 MB</span> available to you.
+  </p>
+  <div class="bg-neutral-quaternary mb-4 h-1.5 w-full rounded-full">
+    <!--error here is fine-->
+    <div
+      class="bg-danger h-1.5 rounded-full"
+      style="<%= 'width: ' + storageUsedPercentage + '%' %>"
+    ></div>
+  </div>
+</div>

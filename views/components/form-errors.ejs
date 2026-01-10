@@ -1,0 +1,6 @@
+<ul class="flex list-inside list-disc flex-col gap-1">
+  <!--prettier-ignore-->
+  <% flash.formErrors?.forEach(err => { %>
+  <li><%= err.msg %></li>
+  <% }); %>
+</ul>

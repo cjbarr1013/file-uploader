@@ -14,6 +14,8 @@ const foldersRouter = require('./routes/foldersRouter');
 const indexRouter = require('./routes/indexRouter');
 const searchRouter = require('./routes/searchRouter');
 const userRouter = require('./routes/userRouter');
+const Folder = require('./models/folder');
+const { formatDate, getImageUrl } = require('./utils/helpers');
 
 // app initialization
 const app = express();
@@ -57,17 +59,22 @@ app.use(passport.session());
 app.use(flash());
 
 // misc. middleware and variables
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   // locals
   res.locals.currentUser = req.user;
   res.locals.flash = {
+    // needed for clean EJS (i.e. <%= flash.formData?.name %>)
     success: req.flash('success'),
     formErrors: req.flash('formErrors'),
     flashErrors: req.flash('flashErrors'),
     formData: req.flash('formData')[0], // will always be a single object
-    showModal: req.flash('showModal')[0], // will always be a single boolean
+    showModal: req.flash('showModal')[0], // will always be a single ID
   };
-
+  res.locals.formatDate = formatDate;
+  res.locals.originalUrl = req.originalUrl;
+  res.locals.getImageUrl = getImageUrl;
+  res.locals.folderList =
+    req.user ? await Folder.findAll(req.user.id).catch(() => []) : []; // catch error so app does not crash
   // session
   next();
 });
@@ -93,7 +100,10 @@ app.use('/', indexRouter);
 
 // error handling
 app.use((req, res) => {
-  return res.status(404).send('404 not found.');
+  return res.status(404).render('pages/404', {
+    layout: 'layouts/error',
+    title: '404: Page Not Found',
+  });
 });
 
 app.use((err, req, res, next) => {

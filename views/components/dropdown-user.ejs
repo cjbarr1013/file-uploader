@@ -1,0 +1,58 @@
+<div>
+  <img
+    id="avatarButton"
+    type="button"
+    data-dropdown-toggle="userDropdown"
+    data-dropdown-placement="bottom-start"
+    class="h-10 w-10 cursor-pointer rounded-full object-cover"
+    src="<%= currentUser.hasPic ? getImageUrl(currentUser.username, currentUser.picVersion) : '/images/placeholder-user.png' %>"
+    alt="User dropdown"
+  />
+
+  <!-- Dropdown menu -->
+  <div id="userDropdown" class="z-21 hidden w-44 border bg-white shadow-lg">
+    <div class="px-4 py-3 text-sm">
+      <div class="font-medium">
+        <%= currentUser.first + '' + currentUser.last %>
+      </div>
+      <div class="truncate">@<%= currentUser.username %></div>
+    </div>
+    <ul class="p-2 text-sm font-medium" aria-labelledby="avatarButton">
+      <li>
+        <button
+          data-modal-target="edit-profile-modal"
+          data-modal-toggle="edit-profile-modal"
+          type="button"
+          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded p-2"
+        >
+          Edit Profile
+        </button>
+      </li>
+      <li>
+        <button
+          data-modal-target="log-out-confirm-modal"
+          data-modal-toggle="log-out-confirm-modal"
+          type="button"
+          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded p-2"
+        >
+          Log Out
+        </button>
+        <!-- <form action="/auth/logout" method="post">
+          <button type="submit" class="block w-full rounded-md p-2">
+            Log out
+          </button>
+        </form> -->
+      </li>
+      <li>
+        <button
+          data-modal-target="delete-account-confirm-modal"
+          data-modal-toggle="delete-account-confirm-modal"
+          type="button"
+          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded p-2"
+        >
+          Delete Account
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

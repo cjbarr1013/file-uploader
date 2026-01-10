@@ -1,0 +1,64 @@
+<form action="/auth/register" method="post" class="flex flex-col gap-4">
+  <%- include('../components/form-errors') %>
+  <div>
+    <label for="first">First name:</label>
+    <input
+      type="text"
+      id="first"
+      name="first"
+      class=""
+      placeholder=""
+      value="<%= flash.formData?.first || '' %>"
+      maxlength="50"
+      required
+    />
+  </div>
+  <div>
+    <label for="last">Last name:</label>
+    <input
+      type="text"
+      id="last"
+      name="last"
+      class=""
+      placeholder=""
+      value="<%= flash.formData?.last || '' %>"
+      maxlength="50"
+      required
+    />
+  </div>
+  <div>
+    <label for="username">Username:</label>
+    <input
+      type="text"
+      id="username"
+      name="username"
+      class=""
+      value="<%= flash.formData?.username || '' %>"
+      required
+    />
+    <p class="text-sm">6-16 characters, letters & numbers ONLY!</p>
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" class="" required />
+    <p class="text-sm">
+      8-32 characters, must have one of each: uppercase, lowercase, number,
+      special (#?!@$%^&*-)
+    </p>
+  </div>
+  <div>
+    <label for="passwordVerify">Verify Password:</label>
+    <input
+      type="password"
+      id="passwordVerify"
+      name="passwordVerify"
+      class=""
+      required
+    />
+  </div>
+  <button type="submit">Register</button>
+  <hr />
+  <div>
+    <a href="/auth/login">Already have an account? Click here.</a>
+  </div>
+</form>
