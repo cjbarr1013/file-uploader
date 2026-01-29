@@ -2,29 +2,13 @@
   action="/user/edit"
   method="post"
   enctype="multipart/form-data"
-  class="flex flex-col gap-4"
+  class="container-form"
 >
   <!--prettier-ignore-->
   <%- include('../components/form-hidden-input') %>
   <%- include('../components/form-errors') %>
-  <div class="flex flex-col gap-2">
-    <div class="flex flex-col gap-2">
-      <label class="" for="pic">Upload user image</label>
-      <input
-        class="border"
-        aria-describedby="file-input-help"
-        id="pic"
-        name="pic"
-        type="file"
-        accept=".png,.jpg,.jpeg,.webp"
-      />
-    </div>
-    <p class="mt-2 text-sm text-gray-500" id="file-input-help">
-      *Only PNG, JPG, JPEG or WEBP formats accepted. &lt;10MB file size.
-    </p>
-  </div>
-  <div>
-    <label for="first">First name:</label>
+  <div class="input-text">
+    <label class="style-required" for="first">First name:</label>
     <input
       type="text"
       id="first"
@@ -36,8 +20,8 @@
       required
     />
   </div>
-  <div>
-    <label for="last">Last name:</label>
+  <div class="input-text">
+    <label class="style-required" for="last">Last name:</label>
     <input
       type="text"
       id="last"
@@ -49,19 +33,28 @@
       required
     />
   </div>
-  <div>
-    <button
-      type="submit"
-      class="bg-brand hover:bg-brand-strong focus:ring-brand-medium shadow-xs rounded-base box-border border border-transparent px-4 py-2.5 text-sm font-medium leading-5 text-white focus:outline-none focus:ring-4"
-    >
-      Submit
-    </button>
+  <div class="input-file">
+    <label class="" for="pic">Upload user image:</label>
+    <input
+      class=""
+      aria-describedby="file-input-help"
+      id="pic"
+      name="pic"
+      type="file"
+      accept=".png,.jpg,.jpeg,.webp"
+    />
+    <p class="text-helper" id="file-input-help">
+      * Only PNG, JPG, JPEG or WEBP formats accepted. &lt;10MB file size.
+    </p>
+  </div>
+  <div class="button-group">
     <button
       data-modal-hide="<%= modalId %>"
       type="button"
-      class="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary shadow-xs rounded-base box-border border px-4 py-2.5 text-sm font-medium leading-5 focus:outline-none focus:ring-4"
+      class="button-cancel"
     >
       Cancel
     </button>
+    <button type="submit" class="button-submit-neutral">Submit</button>
   </div>
 </form>

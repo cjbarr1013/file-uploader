@@ -2,7 +2,7 @@
   <% flash.success?.forEach((item, i) => { %>
   <div
     id="flash-success-<%= i %>"
-    class="text-body bg-neutral-primary-soft rounded-base shadow-xs border-default flex w-full max-w-sm items-center border p-4"
+    class="bg-light dark:bg-dark shadow-xs border-primary shadow-tertiary-soft flex w-full max-w-sm items-center rounded border px-4 py-3"
     role="alert"
   >
     <div
@@ -27,10 +27,10 @@
       </svg>
       <span class="sr-only">Check icon</span>
     </div>
-    <div class="ms-3 text-sm font-normal"><%= item.msg %></div>
+    <div class="mx-3 text-sm font-normal"><%= item.msg %></div>
     <button
       type="button"
-      class="text-body hover:text-heading hover:bg-neutral-secondary-medium focus:ring-neutral-tertiary ms-auto box-border flex h-8 w-8 items-center justify-center rounded border border-transparent bg-transparent text-sm font-medium leading-5 focus:outline-none focus:ring-4"
+      class="button-icon p-2"
       data-dismiss-target="#flash-success-<%= i %>"
       aria-label="Close"
     >
@@ -57,7 +57,7 @@
   <% }); %> <% flash.flashErrors?.forEach((item, i) => { %>
   <div
     id="flash-error-<%= i %>"
-    class="text-body bg-neutral-primary-soft rounded-base shadow-xs border-default flex w-full max-w-sm items-center border p-4"
+    class="bg-light dark:bg-dark shadow-xs border-primary shadow-tertiary-soft flex w-full max-w-sm items-center rounded border px-4 py-3"
     role="alert"
   >
     <div
@@ -82,10 +82,10 @@
       </svg>
       <span class="sr-only">Warning icon</span>
     </div>
-    <div class="ms-3 text-sm font-normal"><%= item.msg %></div>
+    <div class="mx-3 text-sm font-normal"><%= item.msg %></div>
     <button
       type="button"
-      class="text-body hover:text-heading hover:bg-neutral-secondary-medium focus:ring-neutral-tertiary ms-auto box-border flex h-8 w-8 items-center justify-center rounded border border-transparent bg-transparent text-sm font-medium leading-5 focus:outline-none focus:ring-4"
+      class="button-icon p-2"
       data-dismiss-target="#flash-error-<%= i %>"
       aria-label="Close"
     >

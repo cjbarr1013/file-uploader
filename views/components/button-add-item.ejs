@@ -1,39 +1,12 @@
-<div data-dial-init class="group fixed bottom-4 end-4">
-  <div
-    id="speed-dial-menu-dropdown"
-    class="bg-neutral-primary-medium border-default-medium rounded-base shadow-xs mb-4 flex hidden flex-col justify-end space-y-2 border"
-  >
-    <ul class="text-body p-2 text-sm font-medium">
-      <li>
-        <button
-          data-modal-target="upload-file-modal"
-          data-modal-toggle="upload-file-modal"
-          type="button"
-          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center gap-1 rounded p-2"
-        >
-          <%- include('icon-file') %>
-          <span class="whitespace-nowrap text-sm font-medium">Upload File</span>
-        </button>
-      </li>
-      <li>
-        <button
-          data-modal-target="create-folder-modal"
-          data-modal-toggle="create-folder-modal"
-          type="button"
-          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center gap-1 rounded p-2"
-        >
-          <%- include('icon-folder') %>
-          <span class="whitespace-nowrap text-sm font-medium">New Folder</span>
-        </button>
-      </li>
-    </ul>
-  </div>
+<div class="group relative">
   <button
     type="button"
-    data-dial-toggle="speed-dial-menu-dropdown"
-    aria-controls="speed-dial-menu-dropdown"
-    aria-expanded="false"
-    class="bg-brand hover:bg-brand-strong focus:ring-brand-medium ml-auto flex h-14 w-14 items-center justify-center rounded-full text-white focus:outline-none focus:ring-4"
+    id="add-item-menu-button"
+    data-dropdown-trigger="hover"
+    data-dropdown-delay="250"
+    data-dropdown-placement="top-end"
+    data-dropdown-toggle="add-item-menu-dropdown"
+    class="bg-primary hover:bg-primary-strong text-body-light ml-auto flex h-10 w-14 items-center justify-center rounded-sm"
   >
     <svg
       class="h-5 w-5 transition-transform group-hover:rotate-45"
@@ -54,4 +27,30 @@
     </svg>
     <span class="sr-only">Open actions menu</span>
   </button>
+  <div id="add-item-menu-dropdown" class="dropdown-menu hidden w-40">
+    <ul class="">
+      <li>
+        <button
+          data-modal-target="upload-file-modal"
+          data-modal-toggle="upload-file-modal"
+          type="button"
+          class="items-center gap-1"
+        >
+          <%- include('icon-file', {size: 'small'}) %>
+          <span class="whitespace-nowrap">Upload File</span>
+        </button>
+      </li>
+      <li>
+        <button
+          data-modal-target="create-folder-modal"
+          data-modal-toggle="create-folder-modal"
+          type="button"
+          class="items-center gap-1"
+        >
+          <%- include('icon-folder', {size: 'small'}) %>
+          <span class="whitespace-nowrap">New Folder</span>
+        </button>
+      </li>
+    </ul>
+  </div>
 </div>

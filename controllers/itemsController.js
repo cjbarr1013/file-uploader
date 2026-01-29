@@ -10,8 +10,9 @@ async function getHome(req, res, next) {
       null,
       req.user.sortPreference
     );
-    return res.render('pages/folder', {
+    return res.render('pages/main', {
       layout: 'layouts/dashboard',
+      currentPage: 'home',
       title: 'Home',
       breadcrumb: null,
       items,
@@ -47,10 +48,12 @@ async function getFolder(req, res) {
       req.user.sortPreference
     );
 
-    return res.render('pages/folder', {
+    return res.render('pages/main', {
       layout: 'layouts/dashboard',
+      currentPage: 'folder',
       title: folder.name,
       breadcrumb,
+      breadcrumbTitle: folder.name,
       items,
     });
   } catch (err) {
@@ -70,9 +73,12 @@ async function getFavorites(req, res) {
       req.user.id,
       req.user.sortPreference
     );
-    return res.render('pages/favorites', {
+    return res.render('pages/main', {
       layout: 'layouts/dashboard',
+      currentPage: 'favorites',
       title: 'Favorites',
+      breadcrumb: [],
+      breadcrumbTitle: 'Favorites',
       items,
     });
   } catch (err) {
@@ -93,9 +99,12 @@ async function getSearch(req, res) {
       req.query.q,
       req.user.sortPreference
     );
-    return res.render('pages/search', {
+    return res.render('pages/main', {
       layout: 'layouts/dashboard',
+      currentPage: 'search',
       title: `Search Results for: ${req.query.q}`,
+      breadcrumb: [],
+      breadcrumbTitle: 'Search Results',
       items,
     });
   } catch (err) {

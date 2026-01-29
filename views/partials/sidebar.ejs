@@ -1,22 +1,30 @@
 <aside
   id="sidebar-drawer"
-  class="fixed left-0 top-0 z-40 h-full w-64 -translate-x-full transition-transform sm:static sm:row-span-2 sm:translate-x-0"
+  class="fixed left-0 top-0 z-40 h-full w-64 -translate-x-full transition-transform sm:static sm:row-span-2 sm:translate-x-0 sm:p-2"
   aria-label="sidebar"
   tabindex="-1"
   aria-labelledby="sidebar-label"
 >
   <div
-    class="flex h-full flex-col justify-between overflow-y-auto border-r bg-white px-3 py-4"
+    class="border-custom shadow-tertiary-medium sm:shadow-tertiary-softer dark:shadow-tertiary-medium h-full rounded-lg shadow-md"
   >
-    <div class="flex flex-col gap-4">
-      <!--page-title-->
-      <a href="/" class="hidden sm:flex sm:items-center">
-        <h1 class="text-3xl">My Drive</h1>
-      </a>
-      <!--nav-links-->
-      <%- include('../components/sidebar-links') %>
+    <div
+      class="bg-light dark:bg-dark flex h-full flex-col justify-between overflow-y-auto rounded-lg px-2 py-4"
+    >
+      <div class="flex flex-col gap-4">
+        <!--page-title-->
+        <a href="/" class="hidden sm:flex sm:items-center sm:px-2">
+          <h1
+            class="text-heading-dark dark:text-heading-light flex items-center gap-1.5 text-4xl font-semibold"
+          >
+            <%- include('../components/icon-cloud', {size: 12}) %>Cirrus
+          </h1>
+        </a>
+        <!--nav-links-->
+        <%- include('../components/sidebar-links') %>
+      </div>
+      <!--storage-meter-->
+      <%- include('../components/storage-meter') %>
     </div>
-    <!--storage-meter-->
-    <%- include('../components/storage-meter') %>
   </div>
 </aside>

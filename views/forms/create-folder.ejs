@@ -1,42 +1,40 @@
-<form action="/folders/create" method="post" class="flex flex-col gap-4">
+<form action="/folders/create" method="post" class="container-form">
   <!--prettier-ignore-->
   <%- include('../components/form-hidden-input') %>
   <%- include('../components/form-errors') %>
-  <div>
-    <label for="newFolderName">Folder name:</label>
+  <div class="input-text">
+    <label class="style-required" for="newFolderName">Name:</label>
     <input
       type="text"
       id="newFolderName"
       name="itemName"
       class=""
-      placeholder=""
+      placeholder="newFolder123"
       value="<%= flash.formData?.newFolderName%>"
       maxlength="50"
       required
     />
   </div>
-  <select id="parentId" name="parentId" class="">
-    <option value="" selected>Home</option>
-    <hr />
-    <optgroup label="Recent Folders">
-      <% folderList.forEach(folder => { %>
-      <option value="<%= folder.id %>"><%= folder.name %></option>
-      <% }); %>
-    </optgroup>
-  </select>
-  <div>
-    <button
-      type="submit"
-      class="bg-brand hover:bg-brand-strong focus:ring-brand-medium shadow-xs rounded-base box-border border border-transparent px-4 py-2.5 text-sm font-medium leading-5 text-white focus:outline-none focus:ring-4"
-    >
-      Submit
-    </button>
+  <div class="input-select">
+    <label class="style-required" for="parentId">Location:</label>
+    <select id="parentId" name="parentId" class="">
+      <option value="" selected>Home</option>
+      <hr />
+      <optgroup label="Recent Folders">
+        <% folderList.forEach(folder => { %>
+        <option value="<%= folder.id %>"><%= folder.name %></option>
+        <% }); %>
+      </optgroup>
+    </select>
+  </div>
+  <div class="button-group">
     <button
       data-modal-hide="create-folder-modal"
       type="button"
-      class="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary shadow-xs rounded-base box-border border px-4 py-2.5 text-sm font-medium leading-5 focus:outline-none focus:ring-4"
+      class="button-cancel"
     >
       Cancel
     </button>
+    <button type="submit" class="button-submit-neutral">Submit</button>
   </div>
 </form>

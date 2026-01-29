@@ -1,12 +1,12 @@
-<div class="flex w-[10%] items-center justify-center">
+<div class="flex items-center justify-center">
   <button
-    id="<%= item.type %>-<%= item.id %>"
-    data-dropdown-toggle="dropdown-options-<%= item.type %>-<%= item.id %>"
+    id="<%= context %>-<%= item.type %>-<%= item.id %>"
+    data-dropdown-toggle="dropdown-options-<%= context %>-<%= item.type %>-<%= item.id %>"
     type="button"
-    class="text-body bg-neutral-primary-soft border-default hover:bg-neutral-secondary-medium hover:text-heading focus:ring-3 focus:ring-neutral-tertiary-soft inline-flex h-full w-9 items-center justify-center rounded-sm border text-sm font-medium leading-5 focus:outline-none"
+    class="button-icon hover:bg-light-softer dark:hover:bg-dark-softer p-1"
   >
     <svg
-      class="h-6 w-6 text-gray-800 dark:text-white"
+      class="h-6 w-6"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -23,13 +23,10 @@
     </svg>
   </button>
   <div
-    id="dropdown-options-<%= item.type %>-<%= item.id %>"
-    class="bg-neutral-primary-medium border-default-medium rounded-base z-10 block hidden w-36 border shadow-lg"
+    id="dropdown-options-<%= context %>-<%= item.type %>-<%= item.id %>"
+    class="dropdown-menu z-4 hidden w-36"
   >
-    <ul
-      class="text-body p-2 text-sm font-medium"
-      aria-labelledby="dropdownMessages"
-    >
+    <ul class="" aria-labelledby="dropdownMessages">
       <li>
         <button
           data-modal-target="edit-name-modal"
@@ -37,7 +34,7 @@
           data-edit-item-name
           data-edit-item-name-path="<%= item.type === 'file' ? `/files/${item.id}/edit/name` : `/folders/${item.id}/edit/name` %>"
           type="button"
-          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded p-2"
+          class=""
         >
           Rename
         </button>
@@ -50,7 +47,7 @@
           data-edit-item-favorite-path="<%= item.type === 'file' ? `/files/${item.id}/edit/favorite` : `/folders/${item.id}/edit/favorite` %>"
           data-edit-item-favorite-msg="<%= item.favorite ? `Remove ${item.name} from favorites?` : `Add ${item.name} to favorites?` %>"
           type="button"
-          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded-md p-2"
+          class=""
         >
           <%= item.favorite ? 'Unfavorite' : 'Favorite' %>
         </button>
@@ -62,12 +59,12 @@
           data-edit-item-location
           data-edit-item-location-path="<%= item.type === 'file' ? `/files/${item.id}/edit/location` : `/folders/${item.id}/edit/location` %>"
           type="button"
-          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded-md p-2"
+          class=""
         >
           Move
         </button>
       </li>
-      <% if (item.type === 'file') { %>
+      <% if (item.type === 'file' || item.type === undefined) { %>
       <li>
         <button
           data-modal-target="download-confirm-modal"
@@ -76,7 +73,7 @@
           data-download-confirm-path="/files/<%= item.id %>/download"
           data-download-confirm-msg="Are you sure you want to download <%= item.name %>?"
           type="button"
-          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded-md p-2"
+          class=""
         >
           Download
         </button>
@@ -89,7 +86,7 @@
           data-delete-confirm
           data-delete-confirm-path="<%= item.type === 'file' ? `/files/${item.id}/delete` : `/folders/${item.id}/delete` %>"
           type="button"
-          class="hover:bg-neutral-tertiary-medium hover:text-heading inline-flex w-full items-center rounded-md p-2"
+          class=""
         >
           Delete
         </button>

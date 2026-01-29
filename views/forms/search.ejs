@@ -1,14 +1,19 @@
-<form action="/search" method="get" class="">
+<form action="/search" method="get" class="container-form-search">
   <label for="search" class="sr-only">Search</label>
-  <div class="flex justify-center gap-4">
+  <div class="input-text flex gap-2">
     <input
       type="search"
       id="search"
       name="q"
-      class="w-full max-w-[400px]"
+      class="sm:max-w-[400px]"
       placeholder="Search"
       required
     />
-    <button type="submit" class="">Go!</button>
+    <button
+      type="submit"
+      class="bg-primary hover:bg-primary-strong text-body-light rounded-sm px-3 py-2 text-sm"
+    >
+      Go!
+    </button>
   </div>
 </form>

@@ -1,19 +1,37 @@
 <!--prettier-ignore-->
-<% const storageUsedMB = (Number(currentUser.storageUsed) / 1048576).toFixed(2) %> 
+<% const storageUsedMB = (Number(currentUser.storageUsed) / 1048576).toFixed(2) %>
 <% const storageUsedPercentage = (Number(currentUser.storageUsed) / (100 * 1048576) * 100).toFixed(2) %>
+<%
+  const meterEndRound = storageUsedPercentage > 98 ? 'rounded-e-full' : '';
+%>
 
-<div class="flex flex-col gap-2">
-  <h3 class="text-heading font-semibold">Available storage</h3>
-  <p>
-    You are currently using
-    <span class="text-heading font-semibold"><%= storageUsedMB %></span>
-    of <span class="text-heading font-semibold">100 MB</span> available to you.
-  </p>
-  <div class="bg-neutral-quaternary mb-4 h-1.5 w-full rounded-full">
-    <!--error here is fine-->
+<div class="flex flex-col gap-2 px-2">
+  <div>
+    <h3 class="mb-1 flex items-center gap-1 font-semibold">
+      <%- include('icon-cloud', { size: 5 }) %> Available storage:
+    </h3>
+    <div class="flex flex-col">
+      <p>You are currently using:</p>
+      <p>
+        <span class="font-semibold"><%= storageUsedMB %></span> /
+        <span class="font-semibold">100 MB</span>
+      </p>
+    </div>
+  </div>
+  <div class="bg-neutral-quaternary mb-4 h-2.5 w-full rounded-full">
     <div
-      class="bg-danger h-1.5 rounded-full"
-      style="<%= 'width: ' + storageUsedPercentage + '%' %>"
+      class="<%= meterEndRound %> animate-meter-fill h-2.5 rounded-s-full"
+      style="
+        width: <%= storageUsedPercentage %>%;
+        background: linear-gradient(
+          to right,
+          var(--color-success) 50%,
+          var(--color-warning) 60%,
+          var(--color-warning) 70%,
+          var(--color-danger) 95%
+        );
+        background-size: <%= storageUsedPercentage > 0 ? (100 / storageUsedPercentage) * 100 : 100 %>% 100%;
+      "
     ></div>
   </div>
 </div>

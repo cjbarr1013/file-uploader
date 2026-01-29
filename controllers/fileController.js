@@ -44,9 +44,12 @@ const validateName = [
 async function getRecent(req, res) {
   try {
     const items = await File.findRecent(req.user.id);
-    return res.render('pages/recent', {
+    return res.render('pages/main', {
       layout: 'layouts/dashboard',
-      title: `Files Updated Last 30 Days`,
+      currentPage: 'recent',
+      title: `Updated Last 30 Days`,
+      breadcrumb: [],
+      breadcrumbTitle: 'Recents',
       items,
     });
   } catch (err) {

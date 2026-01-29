@@ -1,64 +1,74 @@
-<form action="/auth/register" method="post" class="flex flex-col gap-4">
+<form action="/auth/register" method="post" class="container-form">
   <%- include('../components/form-errors') %>
-  <div>
-    <label for="first">First name:</label>
+  <div class="input-text">
+    <label for="first" class="style-required">First name:</label>
     <input
       type="text"
       id="first"
       name="first"
       class=""
-      placeholder=""
+      placeholder="Bobby"
+      aria-label="first name"
       value="<%= flash.formData?.first || '' %>"
       maxlength="50"
       required
     />
   </div>
-  <div>
-    <label for="last">Last name:</label>
+  <div class="input-text">
+    <label for="last" class="style-required">Last name:</label>
     <input
       type="text"
       id="last"
       name="last"
       class=""
-      placeholder=""
+      placeholder="Jenkins"
+      aria-label="last name"
       value="<%= flash.formData?.last || '' %>"
       maxlength="50"
       required
     />
   </div>
-  <div>
-    <label for="username">Username:</label>
+  <div class="input-text">
+    <label for="username" class="style-required">Username:</label>
     <input
       type="text"
       id="username"
       name="username"
       class=""
+      placeholder="bjenkins45"
+      aria-label="username"
       value="<%= flash.formData?.username || '' %>"
       required
     />
-    <p class="text-sm">6-16 characters, letters & numbers ONLY!</p>
+    <p class="text-helper">* 6-16 characters, letters & numbers ONLY!</p>
   </div>
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" class="" required />
-    <p class="text-sm">
-      8-32 characters, must have one of each: uppercase, lowercase, number,
+  <div class="input-text">
+    <label for="password" class="style-required">Password:</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      class=""
+      placeholder="********"
+      aria-label="password"
+      required
+    />
+    <p class="text-helper">
+      * 8-32 characters, must have one of each: uppercase, lowercase, number,
       special (#?!@$%^&*-)
     </p>
   </div>
-  <div>
-    <label for="passwordVerify">Verify Password:</label>
+  <div class="input-text">
+    <label for="passwordVerify" class="style-required">Verify Password:</label>
     <input
       type="password"
       id="passwordVerify"
       name="passwordVerify"
       class=""
+      placeholder="********"
+      aria-label="verify password"
       required
     />
   </div>
-  <button type="submit">Register</button>
-  <hr />
-  <div>
-    <a href="/auth/login">Already have an account? Click here.</a>
-  </div>
+  <button type="submit" class="button-submit-neutral">Register</button>
 </form>

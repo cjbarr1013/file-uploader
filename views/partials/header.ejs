@@ -1,20 +1,32 @@
-<nav class="z-20 col-span-full border-b bg-white px-3 py-2 sm:col-start-2">
-  <div class="grid grid-cols-2 items-center gap-4">
-    <div class="flex sm:hidden">
-      <%- include('../components/button-sidebar-toggle') %>
-      <a href="/" class="flex items-center">
-        <h1 class="text-3xl">My Drive</h1>
-      </a>
-    </div>
+<nav
+  class="relative z-20 col-span-full -mb-2 bg-transparent p-1 sm:col-start-2 sm:p-2"
+>
+  <div
+    class="border-custom shadow-tertiary-softer dark:shadow-tertiary-medium rounded-lg shadow-md"
+  >
     <div
-      class="col-span-full row-start-2 justify-center sm:col-span-1 sm:row-start-1 sm:justify-start"
+      class="bg-light grid grid-cols-[3fr_1fr] items-center gap-4 rounded-lg p-4 py-3 sm:py-2"
     >
-      <%- include('../forms/search') %>
-    </div>
-    <div class="col-start-2 row-start-1 flex justify-end">
-      <!--prettier-ignore-->
-      <%- include('../components/button-dark-mode') %>
-    <%- include('../components/dropdown-user') %>
+      <div class="-ml-2 flex gap-2 sm:hidden">
+        <%- include('../components/button-sidebar-toggle') %>
+        <a href="/" class="rounded-base flex items-center">
+          <h1
+            class="text-heading-dark dark:text-heading-light flex items-center gap-1 text-3xl font-semibold"
+          >
+            <%- include('../components/icon-cloud', {size: 10}) %>Cirrus
+          </h1>
+        </a>
+      </div>
+      <div
+        class="col-span-full row-start-2 justify-center sm:col-span-1 sm:row-start-1 sm:justify-start"
+      >
+        <%- include('../forms/search') %>
+      </div>
+      <div class="col-start-2 row-start-1 flex justify-end gap-2">
+        <!--prettier-ignore-->
+        <%- include('../components/button-dark-mode') %>
+        <%- include('../components/dropdown-user') %>
+      </div>
     </div>
   </div>
 </nav>

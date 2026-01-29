@@ -195,7 +195,7 @@ function redirectSuccess(
 }
 
 function formatDate(date) {
-  return format(new Date(date), 'M/d/yy');
+  return format(new Date(date), 'MMM d, yyyy');
 }
 
 module.exports = {

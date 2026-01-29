@@ -1,19 +1,6 @@
-<form
-  action="/auth/logout"
-  method="post"
-  class="flex items-center justify-center space-x-4"
->
-  <button
-    type="submit"
-    class="bg-success hover:bg-success-strong focus:ring-success-medium shadow-xs rounded-base box-border border border-transparent px-4 py-2.5 text-sm font-medium leading-5 text-white focus:outline-none focus:ring-4"
-  >
-    Yes, please!
-  </button>
-  <button
-    data-modal-hide="<%= modalId %>"
-    type="button"
-    class="text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-neutral-tertiary shadow-xs rounded-base box-border border px-4 py-2.5 text-sm font-medium leading-5 focus:outline-none focus:ring-4"
-  >
+<form action="/auth/logout" method="post" class="button-group">
+  <button data-modal-hide="<%= modalId %>" type="button" class="button-cancel">
     No, cancel.
   </button>
+  <button type="submit" class="button-submit-neutral">Yes, please!</button>
 </form>

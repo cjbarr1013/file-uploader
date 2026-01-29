@@ -35,8 +35,10 @@ const sortLabelsList = [
   <button
     id="sort-dropdown-button"
     data-dropdown-toggle="sort-dropdown"
+    data-dropdown-placement="bottom-end"
     type="button"
-    class="round flex items-center gap-2 rounded-sm border p-2"
+    class="flex items-center gap-2"
+    <%= disabled ? ' disabled' : '' %>
   >
     <svg
       class="h-6 w-6 text-gray-800 md:h-5 md:w-5 dark:text-white"
@@ -82,14 +84,14 @@ const sortLabelsList = [
 
   <div
     id="sort-dropdown"
-    class="bg-neutral-secondary-medium border-default-medium z-10 hidden w-44 rounded-lg border shadow-lg"
+    class="z-10 hidden w-48 dropdown-menu"
   >
-    <ul class="py-2 text-sm">
+    <ul class="">
       <% sortLabelsList.forEach(option => { %>
       <li>
         <button
           type="button"
-          class="text-body hover:bg-neutral-secondary-dark block w-full px-4 py-2 text-left"
+          class="inline-flex"
           onclick="document.getElementById('sort-value').value='<%= option.value %>'; this.form.submit();"
         >
           <%= option.label %>

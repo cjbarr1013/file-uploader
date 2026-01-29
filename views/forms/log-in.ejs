@@ -1,24 +1,29 @@
-<form action="/auth/login" method="post" class="flex flex-col gap-4">
+<form action="/auth/login" method="post" class="container-form">
   <%- include('../components/form-errors') %>
-  <div>
-    <label for="username">Username</label>
+  <div class="input-text">
+    <label for="username" class="style-required">Username:</label>
     <input
       type="text"
       id="username"
       name="username"
       class=""
-      placeholder=""
+      placeholder="jsmith1"
+      aria-label="username"
       value="<%= flash.formData?.username || '' %>"
       required
     />
   </div>
-  <div>
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" class="" required />
+  <div class="input-text">
+    <label for="password" class="style-required">Password:</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      class=""
+      placeholder="********"
+      aria-label="password"
+      required
+    />
   </div>
-  <button type="submit">Log In</button>
-  <hr />
-  <div>
-    <a href="/auth/register">Don't have an account? Click here.</a>
-  </div>
+  <button type="submit" class="button-submit-neutral">Log In</button>
 </form>
