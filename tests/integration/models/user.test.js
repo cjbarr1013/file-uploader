@@ -15,7 +15,7 @@ describe('User Model', () => {
       expect(createdUser).toMatchObject({
         first: 'Connor',
         last: 'Mook',
-        username: 'CMook1',
+        username: 'cmook1',
         hasPic: false,
         picVersion: null,
         storageUsed: 0n,
@@ -41,7 +41,7 @@ describe('User Model', () => {
       expect(dbUser).toMatchObject({
         first: 'John',
         last: 'Smith',
-        username: 'JSmith1',
+        username: 'jsmith1',
       });
     });
 
@@ -54,7 +54,7 @@ describe('User Model', () => {
       expect(dbUser).toMatchObject({
         first: 'John',
         last: 'Smith',
-        username: 'JSmith1',
+        username: 'jsmith1',
       });
     });
 
@@ -67,7 +67,7 @@ describe('User Model', () => {
       expect(dbUser).toMatchObject({
         first: 'John',
         last: 'Smith',
-        username: 'JSmith1',
+        username: 'jsmith1',
       });
       expect(dbUser.files.length).toBeGreaterThan(0);
       expect(dbUser.folders.length).toBeGreaterThan(0);
@@ -91,7 +91,7 @@ describe('User Model', () => {
         id: userId,
         first: 'Chet',
         last: 'Hanks',
-        username: 'JSmith1',
+        username: 'jsmith1',
         hasPic: true,
       });
     });

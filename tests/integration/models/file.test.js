@@ -10,6 +10,7 @@ describe('File Model', () => {
         name: '',
         size: 3987,
         format: 'pdf',
+        mimetype: 'raw',
         creatorId: 1,
       };
 
@@ -20,6 +21,7 @@ describe('File Model', () => {
         size: 3987,
         format: 'pdf',
         favorite: false,
+        mimetype: 'raw',
         creatorId: 1,
       });
 
@@ -76,6 +78,7 @@ describe('File Model', () => {
         name: 'oldfile',
         size: 1000,
         format: 'pdf',
+        mimetype: 'raw',
         creatorId: userId,
         updatedAt: fortyDaysAgo,
         createdAt: fortyDaysAgo,

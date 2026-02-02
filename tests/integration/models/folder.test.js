@@ -76,7 +76,7 @@ describe('Folder Model', () => {
       expect(dbFolder.files.length).toBeGreaterThan(0);
     });
 
-    it('gets breadcrumbs (max 3) based on folder id', async () => {
+    it('gets breadcrumbs based on folder id', async () => {
       const folderId = 4;
       const userId = 1;
       const breadcrumbs = await Folder.findByIdWithBreadcrumbs(
@@ -84,18 +84,10 @@ describe('Folder Model', () => {
         userId
       );
 
-      expect(breadcrumbs).toMatchObject({
-        id: folderId,
-        name: 'subsubfolder2',
-        parent: {
-          id: 2,
-          name: 'subfolder1',
-          parent: {
-            id: 1,
-            name: 'folder1',
-          },
-        },
-      });
+      expect(breadcrumbs).toMatchObject([
+        { id: 1, name: 'folder1' },
+        { id: 2, name: 'subfolder1' },
+      ]);
     });
   });
 

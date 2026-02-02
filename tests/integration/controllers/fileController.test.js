@@ -12,15 +12,23 @@ jest.mock('../../../utils/helpers', () => ({
     secure_url: 'https://res.cloudinary.com/fake/file.txt',
     bytes: 1024,
   }),
-  getDownloadUrl: jest.fn((cloudinaryId, format, fileName) => {
+  getCloudinaryUrl: jest.fn((cloudinaryId, mimetype) => {
     const resourceType =
-      format?.startsWith('image/') ? 'image'
-      : format?.startsWith('video/') ? 'video'
+      mimetype?.startsWith('image/') ? 'image'
+      : mimetype?.startsWith('video/') ? 'video'
       : 'raw';
-    return `https://res.cloudinary.com/fake-cloud/${resourceType}/upload/fl_attachment:${fileName}/file-uploader/user-files/${cloudinaryId}`;
+    return `https://res.cloudinary.com/fake-cloud/${resourceType}/upload/file-uploader/user-files/${cloudinaryId}`;
   }),
   deleteFile: jest.fn().mockResolvedValue({ result: 'ok' }),
 }));
+
+// Mock fetch for download test
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    arrayBuffer: () => Promise.resolve(Buffer.from('fake file content')),
+  })
+);
 
 describe('File Controller', () => {
   it('successfully uploads file', async () => {
@@ -30,7 +38,7 @@ describe('File Controller', () => {
     await agent
       .post('/auth/login')
       .type('form')
-      .send({ username: 'JSmith1', password: 'password' });
+      .send({ username: 'jsmith1', password: 'password' });
 
     // Upload file
     const response = await agent
@@ -52,7 +60,7 @@ describe('File Controller', () => {
     );
 
     const recentFiles = await File.findRecent(1);
-    expect(recentFiles[0].name).toBe('good-test-file.txt');
+    expect(recentFiles[0].name).toBe('good-test-file');
   });
 
   it('does not upload file when too big', async () => {
@@ -62,7 +70,7 @@ describe('File Controller', () => {
     await agent
       .post('/auth/login')
       .type('form')
-      .send({ username: 'JSmith1', password: 'password' });
+      .send({ username: 'jsmith1', password: 'password' });
 
     const filesBefore = await File.findRecent(1);
 
@@ -114,14 +122,14 @@ describe('File Controller', () => {
     expect(filesAfter.length).toBe(filesBefore.length);
   });
 
-  it('gets download URL', async () => {
+  it('downloads file', async () => {
     const agent = request.agent(app);
 
     // Login first
     await agent
       .post('/auth/login')
       .type('form')
-      .send({ username: 'JSmith1', password: 'password' });
+      .send({ username: 'jsmith1', password: 'password' });
 
     // Upload file
     const responseUpload = await agent
@@ -137,22 +145,18 @@ describe('File Controller', () => {
     const files = await File.findRecent(1);
     const newFile = files[0];
 
-    // Get download URL
+    // Download file
     const responseDownload = await agent.get(`/files/${newFile.id}/download`);
 
-    expect(responseDownload.status).toBe(302);
-    expect(responseDownload.headers.location).toContain('cloudinary.com');
-    expect(responseDownload.headers.location).toContain(
-      `attachment:${newFile.name}`
+    expect(responseDownload.status).toBe(200);
+    expect(responseDownload.headers['content-disposition']).toBe(
+      `attachment; filename="${newFile.name}.${newFile.format}"`
     );
-    expect(responseDownload.headers.location).toContain(
-      newFile.cloudinaryPublicId
-    );
-    expect(responseDownload.headers.location).toContain('raw');
-    expect(helpers.getDownloadUrl).toHaveBeenCalledWith(
-      expect.any(String),
-      newFile.format,
-      newFile.name
+    expect(responseDownload.headers['content-type']).toBe(newFile.mimetype);
+    expect(responseDownload.body).toBeDefined();
+    expect(helpers.getCloudinaryUrl).toHaveBeenCalledWith(
+      newFile.cloudinaryPublicId,
+      newFile.mimetype
     );
   });
 
@@ -162,7 +166,7 @@ describe('File Controller', () => {
     await agent
       .post('/auth/login')
       .type('form')
-      .send({ username: 'JSmith1', password: 'password' });
+      .send({ username: 'jsmith1', password: 'password' });
 
     // First upload a file
     const responseUpload = await agent
@@ -179,12 +183,15 @@ describe('File Controller', () => {
     const newFile = files[0];
 
     // Delete it
-    const responseDelete = await agent.post(`/files/${newFile.id}/delete`);
+    const responseDelete = await agent
+      .post(`/files/${newFile.id}/delete`)
+      .type('form')
+      .send({});
 
     expect(responseDelete.status).toBe(302);
     expect(helpers.deleteFile).toHaveBeenCalledWith(
       expect.any(String),
-      newFile.format
+      newFile.mimetype
     );
 
     const filesAfterDelete = await File.findRecent(1);
