@@ -1,12 +1,12 @@
 <div id="container-list-items">
-  <table class="hidden lg:table w-full">
-    <thead>
+  <table class="hidden lg:table lg:w-full lg:table-fixed">
+    <thead class="">
       <tr class="hover:bg-inherit dark:hover:bg-inherit">
-        <th>Name</th>
-        <th>Size</th>
-        <th>Format</th>
-        <th>Last Updated</th>
-        <th class="w-12"></th>
+        <th class="w-[40%]">Name</th>
+        <th class="w-[15%]">Size</th>
+        <th class="w-[15%]">Format</th>
+        <th class="w-[25%]">Last Updated</th>
+        <th class="w-[5%]"></th>
       </tr>
     </thead>
     <tbody>
@@ -19,12 +19,22 @@
           <% if (item.type === 'folder') { %>
             <a href="/folders/<%= item.id %>" class="flex items-center gap-2" onclick="event.stopPropagation()">
               <%- include('../components/icon-folder', {size: 'large'}) %>
-              <span class="font-semibold"><%= item.name %></span>
+              <span class="font-semibold flex gap-2 items-center min-w-0">
+                <span class="truncate min-w-0"><%= item.name %></span>
+                <% if (item.favorite) { %>
+                  <%- include('../components/icon-star') %>
+                <% } %>
+              </span>
             </a>
           <% } else { %>
             <div class="flex items-center gap-2">
               <%- include('../components/icon-file', {size: 'large'}) %>
-              <span class="font-semibold"><%= item.name %></span>
+              <span class="font-semibold flex gap-2 items-center min-w-0">
+                <span class="truncate min-w-0"><%= item.name %></span>
+                <% if (item.favorite) { %>
+                  <%- include('../components/icon-star') %>
+                <% } %>
+              </span>
             </div>
           <% } %>
         </td>
@@ -68,7 +78,12 @@
               <% } %>
             </div>
             <div class="min-w-0">
-              <h3 class="font-semibold truncate text-sm xs:text-base"><span class="sr-only">Name: </span><%= item.name %></h3>
+              <h3 class="font-semibold flex gap-1 xs:gap-2 items-center min-w-0 text-sm xs:text-base"><span class="sr-only">Name: </span>
+                <span class="truncate min-w-0"><%= item.name %></span>
+                <% if (item.favorite) { %>
+                  <%- include('../components/icon-star') %>
+                <% } %>
+              </h3>
               <% if (item.format !== null) { %>
               <div class="flex gap-1 text-sm">
                 <p class="hidden xs:block"><span class="sr-only">Size: </span><%= (Number(item.size) / 1048576).toFixed(2) %> MB</p>
@@ -80,7 +95,10 @@
               <% } %>
             </div>
           </div>
-          <p class="shrink-0 whitespace-nowrap min-w-[100px] w-[35%] flex flex-col items-start text-sm"><span class="font-medium">Last updated:</span><%= formatDate(item.updatedAt) %></p>
+          <p class="shrink-0 whitespace-nowrap min-w-[100px] w-[30%] xs:w-[35%] flex flex-col items-start text-sm">
+            <span class="font-medium">Last updated:</span>
+            <%= formatDate(item.updatedAt) %>
+          </p>
 
     <!--prettier-ignore-->
     <% if (item.type === 'folder') { %>

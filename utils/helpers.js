@@ -198,6 +198,10 @@ function formatDate(date) {
   return format(new Date(date), 'MMM d, yyyy');
 }
 
+function truncateString(str, maxLength = 20) {
+  return str.length > maxLength ? str.slice(0, maxLength) + '…' : str;
+}
+
 module.exports = {
   reformatSort,
   uploadImageBuffer,
@@ -210,4 +214,5 @@ module.exports = {
   redirectErrorForm,
   redirectSuccess,
   formatDate,
+  truncateString,
 };

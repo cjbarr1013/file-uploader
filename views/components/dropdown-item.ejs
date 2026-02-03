@@ -45,7 +45,7 @@
           data-modal-toggle="edit-favorite-confirm-modal"
           data-edit-item-favorite
           data-edit-item-favorite-path="<%= item.type === 'file' ? `/files/${item.id}/edit/favorite` : `/folders/${item.id}/edit/favorite` %>"
-          data-edit-item-favorite-msg="<%= item.favorite ? `Remove ${item.name} from favorites?` : `Add ${item.name} to favorites?` %>"
+          data-edit-item-favorite-msg="<%= item.favorite ? `Remove ${truncateString(item.name)} from favorites?` : `Add ${truncateString(item.name)} to favorites?` %>"
           type="button"
           class=""
         >
@@ -71,7 +71,7 @@
           data-modal-toggle="download-confirm-modal"
           data-download-confirm
           data-download-confirm-path="/files/<%= item.id %>/download"
-          data-download-confirm-msg="Are you sure you want to download <%= item.name %>?"
+          data-download-confirm-msg="Are you sure you want to download <%= truncateString(item.name) %>?"
           type="button"
           class=""
         >

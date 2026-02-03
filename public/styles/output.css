@@ -27,6 +27,7 @@
     --color-orange-800: oklch(47% 0.157 37.304);
     --color-orange-900: oklch(40.8% 0.123 38.172);
     --color-orange-950: oklch(26.6% 0.079 36.259);
+    --color-amber-400: oklch(82.8% 0.189 84.429);
     --color-yellow-50: oklch(98.7% 0.026 102.212);
     --color-yellow-100: oklch(97.3% 0.071 103.193);
     --color-yellow-200: oklch(94.5% 0.129 101.54);
@@ -1227,6 +1228,9 @@
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
   }
+  .mb-px {
+    margin-bottom: 1px;
+  }
   .apexcharts-xaxistooltip {
     .apexcharts-canvas & {
       color: var(--color-body) !important;
@@ -1486,8 +1490,23 @@
   .w-64 {
     width: calc(var(--spacing) * 64);
   }
+  .w-\[5\%\] {
+    width: 5%;
+  }
+  .w-\[15\%\] {
+    width: 15%;
+  }
+  .w-\[25\%\] {
+    width: 25%;
+  }
+  .w-\[30\%\] {
+    width: 30%;
+  }
   .w-\[35\%\] {
     width: 35%;
+  }
+  .w-\[40\%\] {
+    width: 40%;
   }
   .w-\[180px\] {
     width: 180px;
@@ -1497,6 +1516,9 @@
   }
   .max-w-2xl {
     max-width: var(--container-2xl);
+  }
+  .max-w-\[40\%\] {
+    max-width: 40%;
   }
   .max-w-\[400px\] {
     max-width: 400px;
@@ -2217,6 +2239,9 @@
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
   }
+  .text-ellipsis {
+    text-overflow: ellipsis;
+  }
   .whitespace-nowrap {
     white-space: nowrap;
   }
@@ -2243,6 +2268,9 @@
     .datatable-wrapper .datatable-table thead th& .datatable-sorter {
       color: var(--color-heading);
     }
+  }
+  .text-amber-400 {
+    color: var(--color-amber-400);
   }
   .text-body {
     color: var(--color-body);
@@ -2563,6 +2591,11 @@
       display: inline-block;
     }
   }
+  .xs\:w-\[35\%\] {
+    @media (width >= 28rem) {
+      width: 35%;
+    }
+  }
   .xs\:max-w-20 {
     @media (width >= 28rem) {
       max-width: calc(var(--spacing) * 20);
@@ -2764,9 +2797,19 @@
       display: table;
     }
   }
+  .lg\:w-full {
+    @media (width >= 64rem) {
+      width: 100%;
+    }
+  }
   .lg\:max-w-none {
     @media (width >= 64rem) {
       max-width: none;
+    }
+  }
+  .lg\:table-fixed {
+    @media (width >= 64rem) {
+      table-layout: fixed;
     }
   }
   .rtl\:rotate-180 {

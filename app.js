@@ -15,7 +15,7 @@ const indexRouter = require('./routes/indexRouter');
 const searchRouter = require('./routes/searchRouter');
 const userRouter = require('./routes/userRouter');
 const Folder = require('./models/folder');
-const { formatDate, getImageUrl } = require('./utils/helpers');
+const { formatDate, getImageUrl, truncateString } = require('./utils/helpers');
 
 // app initialization
 const app = express();
@@ -73,6 +73,7 @@ app.use(async (req, res, next) => {
   res.locals.formatDate = formatDate;
   res.locals.originalUrl = req.originalUrl;
   res.locals.getImageUrl = getImageUrl;
+  res.locals.truncateString = truncateString;
   res.locals.folderList =
     req.user ? await Folder.findAll(req.user.id).catch(() => []) : []; // catch error so app does not crash
   // session
