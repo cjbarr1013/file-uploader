@@ -33,6 +33,7 @@
           data-modal-toggle="edit-name-modal"
           data-edit-item-name
           data-edit-item-name-path="<%= item.type === 'file' ? `/files/${item.id}/edit/name` : `/folders/${item.id}/edit/name` %>"
+          data-edit-item-name-value="<%= item.name %>"
           type="button"
           class=""
         >
@@ -58,6 +59,7 @@
           data-modal-toggle="edit-location-modal"
           data-edit-item-location
           data-edit-item-location-path="<%= item.type === 'file' ? `/files/${item.id}/edit/location` : `/folders/${item.id}/edit/location` %>"
+          data-edit-item-location-value="<%= item.parentId %>"
           type="button"
           class=""
         >
@@ -85,6 +87,7 @@
           data-modal-toggle="delete-item-confirm-modal"
           data-delete-confirm
           data-delete-confirm-path="<%= item.type === 'file' ? `/files/${item.id}/delete` : `/folders/${item.id}/delete` %>"
+          data-delete-confirm-msg="Are you sure you want to delete <%= truncateString(item.name) %><%= item.type === 'folder' ? ' and its content' : '' %>?"
           type="button"
           class=""
         >

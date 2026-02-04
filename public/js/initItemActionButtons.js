@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const btns = document.querySelectorAll('button[data-delete-confirm]');
   const form = document.querySelector('#delete-confirm-form');
+  const msg = document.querySelector('#delete-item-confirm-modal-msg');
 
   btns.forEach((btn) => {
     btn.addEventListener('click', () => {
       form.action = btn.getAttribute('data-delete-confirm-path');
+      msg.textContent = btn.getAttribute('data-delete-confirm-msg');
     });
   });
 });
@@ -12,10 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const btns = document.querySelectorAll('button[data-edit-item-name]');
   const form = document.querySelector('#edit-name-form');
+  const textInput = document.querySelector('#editItemName');
 
   btns.forEach((btn) => {
     btn.addEventListener('click', () => {
       form.action = btn.getAttribute('data-edit-item-name-path');
+      textInput.value = btn.getAttribute('data-edit-item-name-value') || '';
     });
   });
 });
@@ -23,10 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const btns = document.querySelectorAll('button[data-edit-item-location]');
   const form = document.querySelector('#edit-location-form');
+  const select = document.querySelector('#newParentId');
 
   btns.forEach((btn) => {
     btn.addEventListener('click', () => {
       form.action = btn.getAttribute('data-edit-item-location-path');
+      select.value = btn.getAttribute('data-edit-item-location-value') || '';
     });
   });
 });
