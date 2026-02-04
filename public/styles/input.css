@@ -51,6 +51,8 @@
 
   --breakpoint-xs: 28rem;
 
+  --animate-slide-in-out: slide-in-out 6s ease-in-out 1 forwards;
+
   /* 
   --font-sans: ;
   --font-serif: ;
@@ -185,5 +187,19 @@
   }
   to {
     transform: scaleX(1);
+  }
+}
+
+@keyframes slide-in-out {
+  0%,
+  100% {
+    transform: translateX(500px);
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    transform: translateX(0);
+    opacity: 1;
   }
 }

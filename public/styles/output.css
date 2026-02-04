@@ -332,6 +332,7 @@
     --color-light-soft: var(--color-gray-100);
     --color-light-strong: var(--color-white);
     --color-dark-softer: var(--color-gray-600);
+    --animate-slide-in-out: slide-in-out 6s ease-in-out 1 forwards;
   }
 }
 @layer base {
@@ -1627,6 +1628,9 @@
   }
   .transform-none {
     transform: none;
+  }
+  .animate-slide-in-out {
+    animation: var(--animate-slide-in-out);
   }
   .cursor-default {
     cursor: default;
@@ -3520,6 +3524,16 @@
   }
   to {
     transform: scaleX(1);
+  }
+}
+@keyframes slide-in-out {
+  0%, 100% {
+    transform: translateX(500px);
+    opacity: 0;
+  }
+  10%, 90% {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 @layer base {

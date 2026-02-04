@@ -2,7 +2,7 @@
   <% flash.success?.forEach((item, i) => { %>
   <div
     id="flash-success-<%= i %>"
-    class="bg-light dark:bg-dark shadow-xs border-primary shadow-tertiary-soft flex w-full max-w-sm items-center rounded border px-4 py-3"
+    class="bg-light dark:bg-dark shadow-xs border-primary shadow-tertiary-soft animate-slide-in-out flex w-full max-w-sm items-center rounded border px-4 py-3"
     role="alert"
   >
     <div
@@ -57,7 +57,7 @@
   <% }); %> <% flash.flashErrors?.forEach((item, i) => { %>
   <div
     id="flash-error-<%= i %>"
-    class="bg-light dark:bg-dark shadow-xs border-primary shadow-tertiary-soft flex w-full max-w-sm items-center rounded border px-4 py-3"
+    class="bg-light dark:bg-dark shadow-xs border-primary shadow-tertiary-soft animate-slide-in-out flex w-full max-w-sm items-center rounded border px-4 py-3"
     role="alert"
   >
     <div
