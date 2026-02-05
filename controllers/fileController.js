@@ -48,6 +48,7 @@ async function getRecent(req, res) {
       layout: 'layouts/dashboard',
       currentPage: 'recent',
       title: `Updated Last 30 Days`,
+      folder: {},
       breadcrumb: [],
       breadcrumbTitle: 'Recents',
       items,
