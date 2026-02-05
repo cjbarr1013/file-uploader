@@ -20,6 +20,34 @@
 
     <p class="text-helper" id="upload-input-help">* Maximum file size: 10MB</p>
   </div>
+  <div class="input-text">
+    <label class="style-required" for="uploadName">File name:</label>
+    <input
+      type="text"
+      id="uploadName"
+      name="itemName"
+      class=""
+      placeholder=""
+      value="<%= flash.formData?.itemName %>"
+      maxlength="50"
+      disabled
+      required
+    />
+    <div class="input-checkbox mt-1.5 flex items-center gap-2">
+      <input
+        checked
+        id="uploadNameCheckbox"
+        type="checkbox"
+        value=""
+        class="h-4 w-4"
+      />
+      <label
+        for="uploadNameCheckbox"
+        class="mb-0 select-none text-sm font-normal"
+        >Use original file name?</label
+      >
+    </div>
+  </div>
   <div class="input-select">
     <label class="style-required" for="parentId">Location:</label>
     <select id="parentId" name="parentId" class="">

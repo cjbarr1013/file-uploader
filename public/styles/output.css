@@ -310,6 +310,7 @@
     --color-warning: var(--color-orange-500);
     --color-dark-soft: var(--color-gray-800);
     --color-dark: var(--color-gray-900);
+    --color-dark-strong: var(--color-gray-950);
     --color-light: var(--color-gray-50);
     --color-default: var(--color-gray-200);
     --color-default-medium: var(--color-gray-200);
@@ -933,6 +934,9 @@
   .mt-0\.5 {
     margin-top: calc(var(--spacing) * 0.5);
   }
+  .mt-1\.5 {
+    margin-top: calc(var(--spacing) * 1.5);
+  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
@@ -1216,6 +1220,9 @@
   }
   .-mb-2 {
     margin-bottom: calc(var(--spacing) * -2);
+  }
+  .mb-0 {
+    margin-bottom: calc(var(--spacing) * 0);
   }
   .mb-0\.5 {
     margin-bottom: calc(var(--spacing) * 0.5);
@@ -2401,6 +2408,10 @@
     --tw-ease: var(--ease-out);
     transition-timing-function: var(--ease-out);
   }
+  .select-none {
+    -webkit-user-select: none;
+    user-select: none;
+  }
   .group-hover\:rotate-45 {
     &:is(:where(.group):hover *) {
       @media (hover: hover) {
@@ -3277,12 +3288,26 @@
         color: transparent;
       }
     }
+    &:disabled {
+      cursor: not-allowed;
+    }
+    &:disabled {
+      background-color: var(--color-light-softer);
+    }
+    &:disabled {
+      opacity: 60%;
+    }
     &:where(.dark, .dark *) {
       color: var(--color-heading-light);
     }
     &:where(.dark, .dark *) {
       &:focus {
         background-color: var(--color-dark-soft);
+      }
+    }
+    &:where(.dark, .dark *) {
+      &:disabled {
+        background-color: var(--color-dark-strong);
       }
     }
   }
@@ -3335,6 +3360,13 @@
         background-color: var(--color-dark-soft);
       }
     }
+  }
+  .container-form .input-checkbox > input {
+    border-radius: var(--radius-xs);
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+    border-color: var(--color-default-medium);
+    background-color: var(--color-neutral-secondary-medium);
   }
   #container-list-items > table tr {
     border-bottom-style: var(--tw-border-style);

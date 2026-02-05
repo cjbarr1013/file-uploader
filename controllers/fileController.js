@@ -64,7 +64,7 @@ async function getRecent(req, res) {
 }
 
 async function postUpload(req, res) {
-  const { upload, parentId } = req.body;
+  const { upload, itemName, parentId } = req.body;
   const normalizedParentId = parentId ? Number.parseInt(parentId) : null;
   const errors = validationResult(req);
 
@@ -74,7 +74,7 @@ async function postUpload(req, res) {
       res,
       errors.array(),
       req.body.returnTo || '/',
-      { upload, parentId },
+      { upload, itemName, parentId },
       'upload-file-modal'
     );
   }
@@ -96,7 +96,7 @@ async function postUpload(req, res) {
         res,
         [{ msg: 'Upload failed. Please try again.' }],
         req.body.returnTo || '/',
-        { upload, parentId },
+        { upload, itemName, parentId },
         'upload-file-modal'
       );
     }
@@ -104,7 +104,7 @@ async function postUpload(req, res) {
     await File.create(
       {
         cloudinaryPublicId,
-        name: req.file.originalname.split('.')[0],
+        name: itemName,
         size: req.file.size,
         format: req.file.originalname.split('.').at(-1),
         mimetype: req.file.mimetype,
@@ -137,7 +137,7 @@ async function postUpload(req, res) {
       res,
       [{ msg: 'Upload failed. Please try again.' }],
       req.body.returnTo || '/',
-      { upload, parentId },
+      { upload, itemName, parentId },
       'upload-file-modal'
     );
   }

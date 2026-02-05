@@ -127,7 +127,7 @@
 
   .container-form > .input-text > input,
   .container-form-search > .input-text > input {
-    @apply border-default-medium text-heading-dark dark:text-heading-light shadow-xs bg-light focus:bg-light-strong dark:focus:bg-dark-soft block w-full rounded-sm border px-3 py-2.5 text-sm placeholder:text-gray-500 focus:placeholder:text-transparent;
+    @apply border-default-medium text-heading-dark dark:text-heading-light shadow-xs bg-light focus:bg-light-strong dark:focus:bg-dark-soft disabled:bg-light-softer dark:disabled:bg-dark-strong block w-full rounded-sm border px-3 py-2.5 text-sm placeholder:text-gray-500 focus:placeholder:text-transparent disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .container-form > .input-file > input {
@@ -137,6 +137,10 @@
   .container-form > .input-select > select,
   #sort-form > button {
     @apply border-default-medium disabled:bg-light-soft dark:disabled:bg-dark-soft text-heading-dark dark:text-heading-light shadow-xs bg-light block w-full rounded-sm border px-3 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .container-form .input-checkbox > input {
+    @apply border-default-medium rounded-xs bg-neutral-secondary-medium border;
   }
 
   #container-list-items > table tr {
