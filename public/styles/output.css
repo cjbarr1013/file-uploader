@@ -3318,8 +3318,22 @@
     color: var(--color-heading-dark);
     --tw-shadow: 0 1px 2px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    &:disabled {
+      cursor: not-allowed;
+    }
+    &:disabled {
+      background-color: var(--color-light-soft);
+    }
+    &:disabled {
+      opacity: 60%;
+    }
     &:where(.dark, .dark *) {
       color: var(--color-heading-light);
+    }
+    &:where(.dark, .dark *) {
+      &:disabled {
+        background-color: var(--color-dark-soft);
+      }
     }
   }
   #container-list-items > table tr {

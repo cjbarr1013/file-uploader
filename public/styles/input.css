@@ -136,7 +136,7 @@
 
   .container-form > .input-select > select,
   #sort-form > button {
-    @apply border-default-medium text-heading-dark dark:text-heading-light shadow-xs bg-light block w-full rounded-sm border px-3 py-2.5 text-sm;
+    @apply border-default-medium disabled:bg-light-soft dark:disabled:bg-dark-soft text-heading-dark dark:text-heading-light shadow-xs bg-light block w-full rounded-sm border px-3 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   #container-list-items > table tr {
