@@ -202,6 +202,11 @@ function truncateString(str, maxLength = 20) {
   return str.length > maxLength ? str.slice(0, maxLength) + '…' : str;
 }
 
+function normalizeId(id) {
+  // no ID returns null, which represents the root folder (home)
+  return id ? Number.parseInt(id) : null;
+}
+
 module.exports = {
   reformatSort,
   uploadImageBuffer,
@@ -215,4 +220,5 @@ module.exports = {
   redirectSuccess,
   formatDate,
   truncateString,
+  normalizeId,
 };

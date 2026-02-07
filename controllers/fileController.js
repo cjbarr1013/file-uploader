@@ -7,6 +7,7 @@ const {
   redirectErrorForm,
   redirectErrorFlash,
   redirectSuccess,
+  normalizeId,
 } = require('../utils/helpers');
 const File = require('../models/file');
 
@@ -66,7 +67,7 @@ async function getRecent(req, res) {
 
 async function postUpload(req, res) {
   const { upload, itemName, parentId } = req.body;
-  const normalizedParentId = parentId ? Number.parseInt(parentId) : null;
+  const normalizedParentId = normalizeId(parentId);
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -240,7 +241,7 @@ async function postEditLocation(req, res) {
   const { parentId } = req.body;
   const { id } = req.params;
 
-  const normalizedParentId = parentId ? Number.parseInt(parentId) : null;
+  const normalizedParentId = normalizeId(parentId);
   const fileId = id ? Number.parseInt(id) : null;
 
   try {

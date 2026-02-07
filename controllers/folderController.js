@@ -5,6 +5,7 @@ const {
   redirectErrorForm,
   redirectErrorFlash,
   redirectSuccess,
+  normalizeId,
 } = require('../utils/helpers');
 
 const validateName = [
@@ -30,7 +31,7 @@ const validateFolderId = [
 async function postCreate(req, res) {
   const { itemName, parentId } = req.body;
   const errors = validationResult(req);
-  const normalizedParentId = parentId ? Number.parseInt(parentId) : null;
+  const normalizedParentId = normalizeId(parentId);
 
   if (!errors.isEmpty()) {
     return redirectErrorForm(
@@ -110,7 +111,7 @@ async function postEditLocation(req, res) {
   const { parentId } = req.body;
   const { id } = req.params;
 
-  const normalizedParentId = parentId ? Number.parseInt(parentId) : null;
+  const normalizedParentId = normalizeId(parentId);
   const folderId = id ? Number.parseInt(id) : null;
 
   try {
