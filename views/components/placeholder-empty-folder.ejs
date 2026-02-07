@@ -1,0 +1,39 @@
+<div
+  class="flex h-[calc(100%-56px)] w-full flex-col items-center justify-center gap-1 p-4"
+>
+  <% if (currentPage === 'home') { %>
+  <h3 class="text-heading-dark dark:text-heading-light text-xl font-semibold">
+    No resources yet.
+  </h3>
+  <p class="text-body-subtle-dark dark:text-body-subtle-light text-center">
+    Use the
+    <span
+      class="bg-primary text-body-light -mt-0.5 inline-flex h-7 w-9 items-center justify-center rounded-sm align-middle"
+    >
+      <svg
+        class="h-3.5 w-3.5 transition-transform group-hover:rotate-45"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 12h14m-7 7V5"
+        /></svg
+    ></span>
+    button to upload files or create a folder
+  </p>
+  <% } else { %>
+  <p
+    class="text-body-subtle-dark dark:text-body-subtle-light text-lg tracking-wide"
+  >
+    Folder is empty.
+  </p>
+  <% } %>
+</div>

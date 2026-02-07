@@ -1,5 +1,5 @@
 <div class="flex w-full flex-col justify-between overflow-y-auto">
-  <div class="xs:p-4 p-2 pt-4">
+  <div class="xs:p-4 <%= items.length === 0 ? 'h-full' : '' %> p-2 py-4">
     <div class="xs:px-0 mb-4 grid grid-cols-[1fr_auto] items-center gap-4 px-2">
       <div
         class="border-default-medium flex h-full min-w-0 shrink items-center gap-2 border-b"
@@ -21,7 +21,12 @@
       <!--prettier-ignore-->
       <%- include('../components/dropdown-sort', {disabled: currentPage === 'recent' ? true : false}) %>
     </div>
-    <%- include('../components/list-items') %>
+    <!--prettier-ignore-->
+    <% if (items.length > 0) { %> 
+      <%- include('../components/list-items') %>
+    <% } else { %>
+      <%- include('../components/placeholder-empty-folder') %>
+    <% } %>
   </div>
   <%- include('../partials/footer') %>
 </div>
