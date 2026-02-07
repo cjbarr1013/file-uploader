@@ -6,6 +6,7 @@ const {
   redirectErrorFlash,
   redirectErrorForm,
   redirectSuccess,
+  deleteMultipleFiles,
 } = require('../utils/helpers');
 
 const validateFirstAndLast = [
@@ -225,6 +226,16 @@ async function postEdit(req, res) {
 
 async function postDelete(req, res, next) {
   try {
+    try {
+      const { files } = await User.findByIdWithContent(req.user.id);
+      await deleteMultipleFiles(files);
+    } catch (err) {
+      console.error(
+        `Failed to delete files associated with user ID ${req.user.id}`,
+        err
+      );
+    }
+
     await User.delete(req.user.id);
 
     req.logout((err) => {
