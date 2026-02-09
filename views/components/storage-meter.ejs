@@ -7,9 +7,9 @@
 
 <div class="flex flex-col gap-2 px-2">
   <div>
-    <h3 class="mb-1 flex items-center gap-1 font-semibold">
+    <p class="mb-1 flex items-center gap-1 font-semibold">
       <%- include('icon-cloud', { size: 5 }) %> Available storage:
-    </h3>
+    </p>
     <div class="flex flex-col">
       <p>You are currently using:</p>
       <p>
@@ -18,7 +18,14 @@
       </p>
     </div>
   </div>
-  <div class="bg-neutral-quaternary mb-4 h-2.5 w-full rounded-full">
+  <div
+    class="bg-neutral-quaternary mb-4 h-2.5 w-full rounded-full"
+    role="progressbar"
+    aria-valuenow="<%= storageUsedPercentage %>"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-label="Storage usage: <%= storageUsedMB %> of 10 MB used"
+  >
     <div
       class="<%= meterEndRound %> animate-meter-fill h-2.5 rounded-s-full"
       style="

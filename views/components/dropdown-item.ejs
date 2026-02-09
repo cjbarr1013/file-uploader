@@ -4,6 +4,7 @@
     data-dropdown-toggle="dropdown-options-<%= context %>-<%= item.type %>-<%= item.id %>"
     type="button"
     class="button-icon hover:bg-light-softer dark:hover:bg-dark-softer p-1"
+    aria-label="Options for <%= item.name %>"
   >
     <svg
       class="h-6 w-6"
@@ -26,7 +27,7 @@
     id="dropdown-options-<%= context %>-<%= item.type %>-<%= item.id %>"
     class="dropdown-menu z-4 hidden w-36"
   >
-    <ul class="" aria-labelledby="dropdownMessages">
+    <ul class="" aria-labelledby="<%= context %>-<%= item.type %>-<%= item.id %>">
       <li>
         <button
           data-modal-target="edit-name-modal"

@@ -6,11 +6,12 @@
       data-dropdown-toggle="userDropdown"
       data-dropdown-placement="bottom-end"
       class="h-10 w-10 rounded-sm p-0"
+      aria-label="User menu"
     >
       <img
         class="h-full w-full rounded-sm object-cover"
         src="<%= currentUser.hasPic ? getImageUrl(currentUser.username, currentUser.picVersion) : '/images/placeholder-user.png' %>"
-        alt="User dropdown"
+        alt="<%= currentUser.first %> <%= currentUser.last %>"
       />
     </button>
   </div>

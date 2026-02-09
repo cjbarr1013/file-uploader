@@ -38,6 +38,7 @@ const sortLabelsList = [
     data-dropdown-placement="bottom-end"
     type="button"
     class="flex items-center gap-2"
+    aria-label="Sort options"
     <%= disabled ? ' disabled' : '' %>
   >
     <svg
@@ -86,7 +87,7 @@ const sortLabelsList = [
     id="sort-dropdown"
     class="z-10 hidden w-48 dropdown-menu"
   >
-    <ul class="">
+    <ul aria-labelledby="sort-dropdown-button">
       <% sortLabelsList.forEach(option => { %>
       <li>
         <button

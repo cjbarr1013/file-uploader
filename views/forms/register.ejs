@@ -8,7 +8,7 @@
       name="first"
       class=""
       placeholder="Bobby"
-      aria-label="first name"
+      aria-describedby="form-errors"
       value="<%= flash.formData?.first || '' %>"
       maxlength="50"
       required
@@ -22,7 +22,6 @@
       name="last"
       class=""
       placeholder="Jenkins"
-      aria-label="last name"
       value="<%= flash.formData?.last || '' %>"
       maxlength="50"
       required
@@ -36,7 +35,6 @@
       name="username"
       class=""
       placeholder="bjenkins45"
-      aria-label="username"
       value="<%= flash.formData?.username || '' %>"
       required
     />
@@ -50,7 +48,6 @@
       name="password"
       class=""
       placeholder="********"
-      aria-label="password"
       required
     />
     <p class="text-helper">
@@ -66,7 +63,6 @@
       name="passwordVerify"
       class=""
       placeholder="********"
-      aria-label="verify password"
       required
     />
   </div>
