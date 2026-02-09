@@ -18,7 +18,7 @@ const parseImageFile = multer({
 
 const parseFile = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB for general files
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB for general files
 }).single('upload');
 
 const handlePicMulterError = (err, req, res, next) => {
@@ -57,7 +57,7 @@ const handleUploadMulterError = (err, req, res, next) => {
       return redirectErrorForm(
         req,
         res,
-        [{ msg: 'File too large. Maximum size is 10MB.' }],
+        [{ msg: 'File too large. Maximum size is 5MB.' }],
         req.body.returnTo || '/',
         { upload, parentId },
         'upload-file-modal'

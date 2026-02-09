@@ -349,7 +349,7 @@ router.post('/upload', parseFile, validateUpload, postUpload);
 ```
 
 **File Size is in Bytes**
-`req.file.size` from multer is in bytes. File size limit: `10 * 1024 * 1024` (10MB).
+`req.file.size` from multer is in bytes. File size limit: `5 * 1024 * 1024` (5MB).
 
 **Flash Messages**
 
@@ -402,6 +402,6 @@ Test environment uses `.env.test` with separate test database.
 
 ## Project Constraints
 
-- **10MB max file size** - Enforced by Multer configuration
+- **5MB max file size** - Enforced by Multer configuration
 - **File types** - No restrictions on upload (only profile pictures are restricted to images)
 - **No sharing/permissions** - Each user sees only their own files/folders

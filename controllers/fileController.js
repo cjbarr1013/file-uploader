@@ -8,6 +8,7 @@ const {
   redirectErrorFlash,
   redirectSuccess,
   normalizeId,
+  convertBytesToMB,
 } = require('../utils/helpers');
 const File = require('../models/file');
 
@@ -24,7 +25,7 @@ const validateUpload = [
     if (newStorageTotal > storageQuota) {
       const availableSpace = storageQuota - req.user.storageUsed;
       throw new Error(
-        `Upload exceeds storage quota. You have ${Number(availableSpace)} bytes remaining.`
+        `Upload exceeds storage quota. You have ${convertBytesToMB(availableSpace).toFixed(2)}MB remaining.`
       );
     }
 

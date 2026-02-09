@@ -910,12 +910,6 @@
       max-width: 96rem;
     }
   }
-  .mx-0\.5 {
-    margin-inline: calc(var(--spacing) * 0.5);
-  }
-  .mx-1 {
-    margin-inline: calc(var(--spacing) * 1);
-  }
   .mx-3 {
     margin-inline: calc(var(--spacing) * 3);
   }
@@ -943,20 +937,11 @@
   .mt-0\.5 {
     margin-top: calc(var(--spacing) * 0.5);
   }
-  .mt-1 {
-    margin-top: calc(var(--spacing) * 1);
-  }
   .mt-1\.5 {
     margin-top: calc(var(--spacing) * 1.5);
   }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
-  }
-  .mt-4 {
-    margin-top: calc(var(--spacing) * 4);
-  }
-  .mt-8 {
-    margin-top: calc(var(--spacing) * 8);
   }
   .apexcharts-canvas {
     & .apexcharts-tooltip {
@@ -1367,14 +1352,8 @@
   .table {
     display: table;
   }
-  .h-2 {
-    height: calc(var(--spacing) * 2);
-  }
   .h-2\.5 {
     height: calc(var(--spacing) * 2.5);
-  }
-  .h-3 {
-    height: calc(var(--spacing) * 3);
   }
   .h-3\.5 {
     height: calc(var(--spacing) * 3.5);
@@ -1391,14 +1370,8 @@
   .h-7 {
     height: calc(var(--spacing) * 7);
   }
-  .h-7\.5 {
-    height: calc(var(--spacing) * 7.5);
-  }
   .h-8 {
     height: calc(var(--spacing) * 8);
-  }
-  .h-8\.5 {
-    height: calc(var(--spacing) * 8.5);
   }
   .h-10 {
     height: calc(var(--spacing) * 10);
@@ -1492,12 +1465,6 @@
   .w-1\/2 {
     width: calc(1/2 * 100%);
   }
-  .w-2 {
-    width: calc(var(--spacing) * 2);
-  }
-  .w-3 {
-    width: calc(var(--spacing) * 3);
-  }
   .w-3\.5 {
     width: calc(var(--spacing) * 3.5);
   }
@@ -1521,9 +1488,6 @@
   }
   .w-10 {
     width: calc(var(--spacing) * 10);
-  }
-  .w-11 {
-    width: calc(var(--spacing) * 11);
   }
   .w-12 {
     width: calc(var(--spacing) * 12);
@@ -2141,14 +2105,8 @@
   .py-8 {
     padding-block: calc(var(--spacing) * 8);
   }
-  .pt-1 {
-    padding-top: calc(var(--spacing) * 1);
-  }
   .pt-2 {
     padding-top: calc(var(--spacing) * 2);
-  }
-  .pt-4 {
-    padding-top: calc(var(--spacing) * 4);
   }
   .search-filtering-row {
     .datatable-wrapper .datatable-container thead tr& th {

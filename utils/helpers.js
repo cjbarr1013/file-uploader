@@ -207,6 +207,10 @@ function normalizeId(id) {
   return id ? Number.parseInt(id) : null;
 }
 
+function convertBytesToMB(value) {
+  return Number(value) * 0.00000095367432;
+}
+
 module.exports = {
   reformatSort,
   uploadImageBuffer,
@@ -221,4 +225,5 @@ module.exports = {
   formatDate,
   truncateString,
   normalizeId,
+  convertBytesToMB,
 };

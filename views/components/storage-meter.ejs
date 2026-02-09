@@ -1,6 +1,6 @@
 <!--prettier-ignore-->
 <% const storageUsedMB = (Number(currentUser.storageUsed) / 1048576).toFixed(2) %>
-<% const storageUsedPercentage = (Number(currentUser.storageUsed) / (100 * 1048576) * 100).toFixed(2) %>
+<% const storageUsedPercentage = (Number(currentUser.storageUsed) / (10 * 1048576) * 100).toFixed(2) %>
 <%
   const meterEndRound = storageUsedPercentage > 98 ? 'rounded-e-full' : '';
 %>
@@ -14,7 +14,7 @@
       <p>You are currently using:</p>
       <p>
         <span class="font-semibold"><%= storageUsedMB %></span> /
-        <span class="font-semibold">100 MB</span>
+        <span class="font-semibold">10 MB</span>
       </p>
     </div>
   </div>
