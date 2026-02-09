@@ -97,7 +97,11 @@ async function postUpload(req, res) {
       return redirectErrorForm(
         req,
         res,
-        [{ msg: 'Upload failed. Please try again.' }],
+        [
+          {
+            msg: 'Upload failed. File type may be restricted by Cloudinary. Please try again or upload a different file.',
+          },
+        ],
         req.body.returnTo || '/',
         { upload, itemName, parentId },
         'upload-file-modal'
