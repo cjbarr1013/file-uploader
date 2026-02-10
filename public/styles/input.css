@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=SN+Pro:ital,wght@0,200..900;1,200..900&display=swap');
 @import 'tailwindcss';
 
 @import 'flowbite/src/themes/default';
@@ -10,6 +11,17 @@
 
 .style-required:after {
   @apply ml-0.5 text-red-500 content-['*'];
+}
+
+.dark {
+  --color-light-softer: var(--color-slate-200);
+  --color-light-soft: var(--color-slate-100);
+  --color-light: var(--color-slate-50);
+  --color-light-strong: var(--color-white);
+  --color-dark-softer: var(--color-slate-600);
+  --color-dark-soft: var(--color-slate-800);
+  --color-dark: var(--color-slate-900);
+  --color-dark-strong: var(--color-slate-950);
 }
 
 @theme {
@@ -40,21 +52,25 @@
   --color-heading-light: var(--color-gray-100);
 
   /* base neutrals for dark/light mode */
-  --color-light-softer: var(--color-gray-200);
-  --color-light-soft: var(--color-gray-100);
-  --color-light: var(--color-gray-50);
+  --color-light-softer: var(--color-slate-200);
+  --color-light-soft: var(--color-slate-100);
+  --color-light: var(--color-slate-50);
   --color-light-strong: var(--color-white);
-  --color-dark-softer: var(--color-gray-600);
-  --color-dark-soft: var(--color-gray-800);
-  --color-dark: var(--color-gray-900);
-  --color-dark-strong: var(--color-gray-950);
+  --color-dark-softer: var(--color-slate-600);
+  --color-dark-soft: var(--color-slate-800);
+  --color-dark: var(--color-slate-900);
+  --color-dark-strong: var(--color-slate-950);
 
   --breakpoint-xs: 28rem;
 
   --animate-slide-in-out: slide-in-out 6s ease-in-out 1 forwards;
 
-  /* 
-  --font-sans: ;
+  --font-sans:
+    'SN Pro', 'Inter', 'ui-sans-serif', 'system-ui', '-apple-system',
+    'system-ui', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans',
+    'sans-serif', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  /*
   --font-serif: ;
   --font-mono: ;
   */
@@ -110,7 +126,7 @@
   }
 
   .button-cancel {
-    @apply text-body bg-neutral-secondary-medium border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading shadow-xs rounded-base box-border w-full truncate border px-4 py-2.5 text-sm font-medium leading-5;
+    @apply text-body bg-light-soft dark:bg-dark-soft border-default-medium hover:bg-light-softer hover:dark:bg-dark-softer hover:text-heading shadow-xs rounded-base box-border w-full truncate border px-4 py-2.5 text-sm font-medium leading-5;
   }
 
   .button-group {
@@ -127,16 +143,16 @@
 
   .container-form > .input-text > input,
   .container-form-search > .input-text > input {
-    @apply border-default-medium text-heading-dark dark:text-heading-light shadow-xs bg-light focus:bg-light-strong dark:focus:bg-dark-soft disabled:bg-light-softer dark:disabled:bg-dark-strong block w-full rounded-sm border px-3 py-2.5 text-sm placeholder:text-gray-500 focus:placeholder:text-transparent disabled:cursor-not-allowed disabled:opacity-60;
+    @apply border-default-medium text-heading-dark dark:text-heading-light shadow-xs bg-light dark:bg-dark focus:bg-light-strong dark:focus:bg-dark-soft disabled:bg-light-softer dark:disabled:bg-dark-strong block w-full rounded-sm border px-3 py-2.5 text-sm placeholder:text-gray-500 focus:placeholder:text-transparent disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .container-form > .input-file > input {
-    @apply border-default-medium text-heading-dark dark:text-body-light shadow-xs bg-light block w-full rounded-sm border text-sm;
+    @apply border-default-medium text-heading-dark dark:text-body-light shadow-xs bg-light dark:bg-dark block w-full rounded-sm border text-sm;
   }
 
   .container-form > .input-select > select,
   #sort-form > button {
-    @apply border-default-medium disabled:bg-light-soft dark:disabled:bg-dark-soft text-heading-dark dark:text-heading-light shadow-xs bg-light block w-full rounded-sm border px-3 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-60;
+    @apply border-default-medium disabled:bg-light-soft dark:disabled:bg-dark-soft text-heading-dark dark:text-heading-light shadow-xs bg-light dark:bg-dark block w-full rounded-sm border px-3 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .container-form .input-checkbox > input {
@@ -152,11 +168,11 @@
   }
 
   .container-modal {
-    @apply bg-neutral-primary-soft border-default rounded-base relative border p-4 shadow-sm;
+    @apply bg-light dark:bg-dark border-default rounded-base relative border p-4 shadow-sm;
   }
 
   .dropdown-menu {
-    @apply bg-light rounded-base border-primary shadow-tertiary-soft dark:shadow-tertiary-medium border shadow-sm;
+    @apply bg-light dark:bg-dark rounded-base border-primary shadow-tertiary-soft dark:shadow-tertiary-medium border shadow-sm;
   }
 
   .dropdown-menu ul {
