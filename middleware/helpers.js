@@ -1,6 +1,7 @@
 function normalizeUploadName(req, res, next) {
   if (req.body.itemName === undefined) {
-    req.body.itemName = req.file.originalname.split('.')[0];
+    const lastIndex = req.file.originalname.lastIndexOf('.');
+    req.body.itemName = req.file.originalname.slice(0, lastIndex);
   }
   next();
 }

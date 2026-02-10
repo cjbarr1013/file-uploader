@@ -40,7 +40,12 @@ const validateName = [
     .withMessage('File must have a name.')
     .bail()
     .isLength({ max: 50 })
-    .withMessage('Name cannot exceed 50 characters.'),
+    .withMessage('Name cannot exceed 50 characters.')
+    .bail()
+    .matches(/^[a-zA-Z0-9 _\-.]+$/)
+    .withMessage(
+      'Name can only contain letters, numbers, spaces, hyphens, underscores, and periods.'
+    ),
 ];
 
 async function getRecent(req, res) {
