@@ -160,6 +160,16 @@ async function deleteMultipleFiles(files) {
   await Promise.all(promises);
 }
 
+function getSafeReturnUrl(url) {
+  if (!url || typeof url !== 'string') return '/';
+  // Must start with / but not // (protocol-relative URL)
+  // Must not contain :// (absolute URL)
+  if (url.startsWith('/') && !url.startsWith('//') && !url.includes('://')) {
+    return url;
+  }
+  return '/';
+}
+
 function redirectErrorFlash(
   req,
   res,
@@ -167,7 +177,7 @@ function redirectErrorFlash(
   path
 ) {
   req.flash('flashErrors', errors);
-  return res.redirect(path);
+  return res.redirect(getSafeReturnUrl(path));
 }
 
 function redirectErrorForm(
@@ -181,7 +191,7 @@ function redirectErrorForm(
   req.flash('formErrors', errors);
   if (formData) req.flash('formData', formData);
   if (modalId) req.flash('showModal', modalId);
-  return res.redirect(path);
+  return res.redirect(getSafeReturnUrl(path));
 }
 
 function redirectSuccess(
@@ -191,7 +201,7 @@ function redirectSuccess(
   path
 ) {
   req.flash('success', success);
-  return res.redirect(path);
+  return res.redirect(getSafeReturnUrl(path));
 }
 
 function formatDate(date) {
