@@ -31,8 +31,10 @@
     <ul class="">
       <li>
         <button
+          id="upload-file-modal-trigger"
           data-modal-target="upload-file-modal"
           data-modal-toggle="upload-file-modal"
+          data-upload-file-parent-value="<%= folder.id %>"
           type="button"
           class="items-center gap-1"
         >
@@ -42,8 +44,10 @@
       </li>
       <li>
         <button
+          id="create-folder-modal-trigger"
           data-modal-target="create-folder-modal"
           data-modal-toggle="create-folder-modal"
+          data-create-folder-parent-value="<%= folder.id %>"
           type="button"
           class="items-center gap-1"
         >

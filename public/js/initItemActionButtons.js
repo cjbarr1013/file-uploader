@@ -1,4 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const uploadFileBtn = document.querySelector('#upload-file-modal-trigger');
+  const uploadFileForm = document.querySelector('#upload-file-form');
+  const uploadFileselect = uploadFileForm.querySelector('#parentId');
+
+  uploadFileBtn.addEventListener('click', () => {
+    uploadFileselect.value = uploadFileBtn.getAttribute(
+      'data-upload-file-parent-value'
+    );
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const createFolderBtn = document.querySelector(
+    '#create-folder-modal-trigger'
+  );
+  const createFolderForm = document.querySelector('#create-folder-form');
+  const createFolderselect = createFolderForm.querySelector('#parentId');
+
+  createFolderBtn.addEventListener('click', () => {
+    createFolderselect.value = createFolderBtn.getAttribute(
+      'data-create-folder-parent-value'
+    );
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
   const btns = document.querySelectorAll('button[data-delete-confirm]');
   const form = document.querySelector('#delete-confirm-form');
   const msg = document.querySelector('#delete-item-confirm-modal-msg');

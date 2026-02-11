@@ -63,7 +63,7 @@
           data-modal-toggle="edit-location-modal"
           data-edit-item-location
           data-edit-item-location-path="<%= item.type === 'file' ? `/files/${item.id}/edit/location` : `/folders/${item.id}/edit/location` %>"
-          data-edit-item-location-value="<%= item.parentId %>"
+          data-edit-item-location-value="<%= item.parentId || item.folderId %>"
           type="button"
           class=""
         >
