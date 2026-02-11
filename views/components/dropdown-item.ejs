@@ -27,7 +27,10 @@
     id="dropdown-options-<%= context %>-<%= item.type %>-<%= item.id %>"
     class="dropdown-menu z-4 hidden w-36"
   >
-    <ul class="" aria-labelledby="<%= context %>-<%= item.type %>-<%= item.id %>">
+    <ul
+      class=""
+      aria-labelledby="<%= context %>-<%= item.type %>-<%= item.id %>"
+    >
       <li>
         <button
           data-modal-target="edit-name-modal"
@@ -46,7 +49,7 @@
           data-modal-target="edit-favorite-confirm-modal"
           data-modal-toggle="edit-favorite-confirm-modal"
           data-edit-item-favorite
-          data-edit-item-favorite-path="<%= item.type === 'file' ? `/files/${item.id}/edit/favorite` : `/folders/${item.id}/edit/favorite` %>"
+          data-edit-item-favorite-path="<%= item.type === 'file' || currentPage === 'recent' ? `/files/${item.id}/edit/favorite` : `/folders/${item.id}/edit/favorite` %>"
           data-edit-item-favorite-msg="<%= item.favorite ? `Remove ${truncateString(item.name)} from favorites?` : `Add ${truncateString(item.name)} to favorites?` %>"
           type="button"
           class=""
