@@ -24,6 +24,9 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// trust first proxy (req'd for express-rate-limit)
+app.set('trust proxy', 1);
+
 // access public assets
 const assetsPath = path.join(__dirname, 'public');
 app.use(express.static(assetsPath));
